@@ -1,23 +1,26 @@
 {
-  "local": {
-    "domain": "{domain}",
-    "cdnBase": "",
-    "apiBase": "//local-api.danabersama.com:4081"
-  },
-  "dev": {
-    "domain": "{domain}",
-    "cdnBase": "https://dev-cdn.danabersama.com",
-    "apiBase": "https://dev-api.danabersama.com",
-    "oss": {
-      "bucket": "dev-web-static"
-    }
-  },
-  "production": {
-    "domain": "{domain}",
-    "cdnBase": "https://cdn.danabersama.com",
-    "apiBase": "https://api.danabersama.com",
-    "oss": {
-      "bucket": "web-static"
+  "defaultLang": "en",
+  "envs": {
+    "local": {
+      "domain": "{domain}",
+      "cdnBase": "",
+      "apiBase": "//local-api.danabersama.com:4081"
+    },
+    "dev": {
+      "domain": "{domain}",
+      "cdnBase": "https://dev-cdn.danabersama.com",
+      "apiBase": "https://dev-api.danabersama.com",
+      "oss": {
+        "bucket": "dev-web-static"
+      }
+    },
+    "production": {
+      "domain": "{domain}",
+      "cdnBase": "https://cdn.danabersama.com",
+      "apiBase": "https://api.danabersama.com",
+      "oss": {
+        "bucket": "web-static"
+      }
     }
   }
 }

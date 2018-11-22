@@ -1,7 +1,6 @@
 /* global process */
 
-const _ = require('lodash'),
-  fs = require('fs'),
+const fs = require('fs'),
   gulp = require('gulp'),
   conf = require('./conf'),
   util = require('./util'),
@@ -91,7 +90,7 @@ gulp.task('optimize-html', ['copy-html'], function () {
     .pipe(htmlI18n.restorePath())
     .pipe(
       propertyMerge({
-        properties: _.extend(
+        properties: Object.assign(
           {},
           {
             md5map: '%{{md5map}}%'
@@ -132,7 +131,7 @@ gulp.task('bundle-html', ['optimize-html', 'gen-md5map'], function () {
     .src(['dist/**/*.html', '!dist/**/*.component.html'])
     .pipe(
       propertyMerge({
-        properties: _.extend(
+        properties: Object.assign(
           {},
           {
             md5map: JSON.stringify(md5map)

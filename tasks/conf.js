@@ -1,6 +1,6 @@
 /* global process */
 
-const _ = require('lodash'),
+const _ = require('underscore'),
   fs = require('fs'),
   path = require('path'),
   log = require('fancy-log'),
@@ -19,17 +19,20 @@ let conf;
 
 (function () {
   let defaultConf;
-  let envs = defaultConfig.envs || defaultConfig;
+  const envs = defaultConfig.envs || defaultConfig;
   if (!envs[env]) {
     env = 'dev';
   }
-  defaultConf = envs[env];
-  conf = _.extend({}, defaultConf, (config.envs || config)[env]);
+  defaultConf = _.omit(Object.assign({}, defaultConfig, envs[env]), 'envs');
+  conf = _.omit(
+    Object.assign({}, defaultConf, config, (config.envs || config)[env]),
+    'envs'
+  );
 
   log('Running env ' + chalk.green(env));
 
   // overwrite config from command line
-  for (let p in conf) {
+  for (const p in conf) {
     if (process.env[p]) {
       conf[p] = process.env[p];
     }
@@ -55,7 +58,7 @@ conf.getOssKey = function () {
   if (ossKey) {
     return ossKey;
   }
-  let keyPath
+  const keyPath
     = (conf.oss && conf.oss.keyPath) || '/usr/local/etc/lepin/oss-key';
   if (!fs.existsSync(keyPath)) {
     throw new Error('OSS key file "' + keyPath + '" does not exist!');

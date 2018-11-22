@@ -1,7 +1,6 @@
 /* global Buffer */
 
-const _ = require('lodash'),
-  path = require('path'),
+const path = require('path'),
   log = require('fancy-log'),
   chalk = require('chalk'),
   PluginError = require('plugin-error'),
@@ -31,7 +30,7 @@ const EOL = '\n';
 exports.propertyMergeTask = lazypipe().pipe(
   propertyMerge,
   {
-    properties: _.extend({}, conf)
+    properties: Object.assign({}, conf)
   }
 );
 
@@ -71,7 +70,7 @@ exports.lazyHtmlI18nTask = lazypipe().pipe(
   {
     createLangDirs: true,
     langDir: 'src/' + conf.PROJECT_NAME + '/js/lang',
-    defaultLang: 'zh-CN'
+    defaultLang: conf.defaultLang
   }
 );
 
@@ -79,7 +78,7 @@ exports.lazyInitHtmlTask = lazypipe()
   .pipe(
     propertyMerge,
     {
-      properties: _.extend(
+      properties: Object.assign(
         {},
         {
           md5map: '{}'
