@@ -20,14 +20,29 @@ gulp.task('watch', function () {
     console.log(err.stack || err.message || err);
   });
 
-  gulp.watch(['src/**/*.html', '!src/**/*.component.html'], function (evt) {
+  gulp.watch(
+    [
+      'src/*.html',
+      'src/' + conf.PROJECT_NAME + '/**/*.html',
+      '!src/**/*.layout.html',
+      '!src/**/*.inc.html',
+      '!src/**/*.component.html'
+    ],
+    function (evt) {
+      let filePath = evt.path;
+      let part = (path.dirname(filePath) + '/').split('/src/').pop();
+      log(chalk.cyan('[changed]'), filePath);
+      return gulp
+        .src(filePath)
+        .pipe(lazyTasks.lazyInitHtmlTask())
+        .pipe(gulp.dest('dist/' + part));
+    }
+  );
+
+  gulp.watch(['src/**/*.layout.html', 'src/**/*.inc.html'], function (evt) {
     let filePath = evt.path;
-    let part = (path.dirname(filePath) + '/').split('/src/').pop();
     log(chalk.cyan('[changed]'), filePath);
-    return gulp
-      .src(filePath)
-      .pipe(lazyTasks.lazyInitHtmlTask())
-      .pipe(gulp.dest('dist/' + part));
+    return gulp.start('html');
   });
 
   gulp.watch(['src/' + conf.PROJECT_NAME + '/js/**/*.json'], function (evt) {
@@ -180,6 +195,6 @@ gulp.task('watch', function () {
   gulp.watch('src/' + conf.PROJECT_NAME + '/js/lang/**/*.json', function (evt) {
     let filePath = evt.path;
     log(chalk.cyan('[changed]'), filePath);
-    return gulp.start('i18n-resolve-reference');
+    return gulp.start('i18n:resolve-reference');
   });
 });

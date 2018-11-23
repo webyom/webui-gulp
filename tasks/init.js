@@ -52,7 +52,7 @@ gulp.task('eslint', function () {
 });
 
 // convert json into AMD format
-gulp.task('json', ['i18n-validate'], function () {
+gulp.task('json', ['i18n:validate'], function () {
   return gulp
     .src([
       'src/' + conf.PROJECT_NAME + '/js/**/*.json',
@@ -98,7 +98,16 @@ gulp.task('vueify', ['eslint'], function () {
 // move html
 gulp.task('html', function () {
   return gulp
-    .src(['src/**/*.html', '!src/**/*.component.html'])
+    .src(
+      [
+        'src/*.html',
+        'src/' + conf.PROJECT_NAME + '/**/*.html',
+        '!src/**/*.layout.html',
+        '!src/**/*.inc.html',
+        '!src/**/*.component.html'
+      ],
+      {base: 'src'}
+    )
     .pipe(lazyTasks.lazyInitHtmlTask())
     .pipe(gulp.dest('dist'));
 });

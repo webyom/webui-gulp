@@ -7,7 +7,7 @@ const fs = require('fs'),
 
 let versions = [];
 
-gulp.task('release-note-files', function () {
+gulp.task('release-note:files', function () {
   versions = [];
   return gulp
     .src('src/' + conf.PROJECT_NAME + '/js/release-note/*.md')
@@ -40,7 +40,7 @@ gulp.task('release-note-files', function () {
     .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js/release-note'));
 });
 
-gulp.task('release-note-index', ['release-note-files'], function (done) {
+gulp.task('release-note:index', ['release-note:files'], function (done) {
   if (!versions.length) {
     return done();
   }
@@ -79,4 +79,4 @@ gulp.task('release-note-index', ['release-note-files'], function (done) {
   done();
 });
 
-gulp.task('release-note', ['release-note-files', 'release-note-index']);
+gulp.task('release-note', ['release-note:files', 'release-note:index']);

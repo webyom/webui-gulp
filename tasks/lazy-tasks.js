@@ -21,6 +21,7 @@ const path = require('path'),
   htmlI18n = require('gulp-html-i18n'),
   lesshint = require('gulp-lesshint'),
   rename = require('gulp-rename'),
+  htmlOptimizer = require('gulp-html-optimizer'),
   propertyMerge = require('gulp-property-merge');
 
 const EOL = '\n';
@@ -75,6 +76,10 @@ exports.lazyHtmlI18nTask = lazypipe().pipe(
 );
 
 exports.lazyInitHtmlTask = lazypipe()
+  .pipe(
+    htmlOptimizer,
+    {processRequire: false, cacheExtend: false}
+  )
   .pipe(
     propertyMerge,
     {

@@ -16,10 +16,10 @@ const fs = require('fs'),
 const md5map = {};
 
 // bundle
-gulp.task('bundle', ['bundle-amd', 'bundle-html']);
+gulp.task('bundle', ['bundle:amd', 'bundle:html']);
 
 // bundle amd modules
-gulp.task('bundle-amd', ['optimize-html'], function () {
+gulp.task('bundle:amd', ['bundle:html:optimize'], function () {
   return gulp
     .src([
       'dist/' + conf.PROJECT_NAME + '/js/**/*-main.js',
@@ -35,7 +35,7 @@ gulp.task('bundle-amd', ['optimize-html'], function () {
 });
 
 // generate md5map for async loaded js
-gulp.task('gen-md5map', ['bundle-amd'], function (done) {
+gulp.task('bundle:gen-md5map', ['bundle:amd'], function (done) {
   gulp
     .src([
       'dist/' + conf.BASE_PROJECT_NAME + '/js/**/*-main.+(js|json.js)',
@@ -76,14 +76,24 @@ gulp.task('gen-md5map', ['bundle-amd'], function (done) {
     });
 });
 
-gulp.task('copy-html', function () {
+gulp.task('bundle:html:init', function () {
   return gulp
-    .src(['src/**/*.html', '!src/**/*.component.html'])
+    .src(
+      [
+        'src/*.html',
+        'src/' + conf.PROJECT_NAME + '/**/*.html',
+        '!src/**/*.layout.html',
+        '!src/**/*.inc.html',
+        '!src/**/*.component.html'
+      ],
+      {base: 'src'}
+    )
+    .pipe(htmlOptimizer({processRequire: false}))
     .pipe(gulp.dest('dist'));
 });
 
 // optimize html
-gulp.task('optimize-html', ['copy-html'], function () {
+gulp.task('bundle:html:optimize', ['bundle:html:init'], function () {
   return gulp
     .src(['dist/**/*.html', '!dist/**/*.component.html'])
     .pipe(lazyTasks.lazyHtmlI18nTask())
@@ -126,19 +136,23 @@ gulp.task('optimize-html', ['copy-html'], function () {
 });
 
 // bundle html
-gulp.task('bundle-html', ['optimize-html', 'gen-md5map'], function () {
-  return gulp
-    .src(['dist/**/*.html', '!dist/**/*.component.html'])
-    .pipe(
-      propertyMerge({
-        properties: Object.assign(
-          {},
-          {
-            md5map: JSON.stringify(md5map)
-          },
-          conf
-        )
-      })
-    )
-    .pipe(gulp.dest('dist'));
-});
+gulp.task(
+  'bundle:html',
+  ['bundle:html:optimize', 'bundle:gen-md5map'],
+  function () {
+    return gulp
+      .src(['dist/**/*.html', '!dist/**/*.component.html'])
+      .pipe(
+        propertyMerge({
+          properties: Object.assign(
+            {},
+            {
+              md5map: JSON.stringify(md5map)
+            },
+            conf
+          )
+        })
+      )
+      .pipe(gulp.dest('dist'));
+  }
+);

@@ -12,7 +12,7 @@ function fixUrl(fileName, relPath, basePath) {
 }
 
 // digest versioning template and css
-gulp.task('versioning-vendor-css', function () {
+gulp.task('versioning:vendor-css', function () {
   return gulp
     .src(['dist/' + conf.BASE_PROJECT_NAME + '/css/vendor/**/*.css'])
     .pipe(
@@ -25,7 +25,7 @@ gulp.task('versioning-vendor-css', function () {
     .pipe(gulp.dest('dist/' + conf.BASE_PROJECT_NAME + '/css/vendor'));
 });
 
-gulp.task('versioning-app-css', function () {
+gulp.task('versioning:app-css', function () {
   return gulp
     .src([
       'dist/' + conf.PROJECT_NAME + '/css/**/*.css',
@@ -41,7 +41,7 @@ gulp.task('versioning-app-css', function () {
     .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/css'));
 });
 
-gulp.task('versioning-template', function () {
+gulp.task('versioning:template', function () {
   return gulp
     .src([
       'dist/' + conf.PROJECT_NAME + '/js/**/*.css.js',
@@ -58,14 +58,14 @@ gulp.task('versioning-template', function () {
 });
 
 gulp.task(
-  'versioning-asset',
+  'versioning:asset',
   conf.IS_BASE_PROJECT
-    ? ['versioning-app-css', 'versioning-template']
-    : ['versioning-vendor-css', 'versioning-app-css', 'versioning-template']
+    ? ['versioning:app-css', 'versioning:template']
+    : ['versioning:vendor-css', 'versioning:app-css', 'versioning:template']
 );
 
 // digest versioning html page
-gulp.task('versioning-page', function () {
+gulp.task('versioning:page', function () {
   return gulp
     .src(['dist/**/*.html', '!dist/**/*.component.html'])
     .pipe(
