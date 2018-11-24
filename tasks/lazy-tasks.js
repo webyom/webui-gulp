@@ -95,7 +95,7 @@ exports.lazyInitHtmlTask = lazypipe()
   )
   .pipe(exports.lazyHtmlI18nTask);
 
-exports.lazyStylelint = lazypipe().pipe(
+exports.stylelintTask = lazypipe().pipe(
   stylelint,
   {
     reporters: [{formatter: 'string', console: true}]

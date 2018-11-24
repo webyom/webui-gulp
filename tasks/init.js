@@ -104,8 +104,7 @@ gulp.task('html', function () {
         'src/*.html',
         'src/' + conf.PROJECT_NAME + '/**/*.html',
         '!src/**/*.layout.html',
-        '!src/**/*.inc.html',
-        '!src/**/*.component.html'
+        '!src/**/*.inc.html'
       ],
       {base: 'src'}
     )
@@ -125,7 +124,7 @@ gulp.task('stylelint', function () {
       'src/' + conf.PROJECT_NAME + '/js/**/*.scss'
     ])
     .pipe(
-      cache('stylelint', 'src', lazyTasks.lazyStylelint, {writeCache: false})
+      cache('stylelint', 'src', lazyTasks.stylelintTask, {writeCache: false})
     );
 });
 

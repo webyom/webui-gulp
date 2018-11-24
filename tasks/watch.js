@@ -26,8 +26,7 @@ gulp.task('watch', function () {
       'src/*.html',
       'src/' + conf.PROJECT_NAME + '/**/*.html',
       '!src/**/*.layout.html',
-      '!src/**/*.inc.html',
-      '!src/**/*.component.html'
+      '!src/**/*.inc.html'
     ],
     function (evt) {
       let filePath = evt.path;
@@ -138,7 +137,7 @@ gulp.task('watch', function () {
     if (/(^|-)main\.less$/.test(path.basename(filePath)) || isComponent) {
       return gulp
         .src(filePath)
-        .pipe(lazyTasks.lazyStylelint())
+        .pipe(lazyTasks.stylelintTask())
         .pipe(less())
         .on('error', function (err) {
           log(chalk.red(err.message));
@@ -181,7 +180,7 @@ gulp.task('watch', function () {
     if (/(^|-)main\.scss$/.test(path.basename(filePath)) || isComponent) {
       return gulp
         .src(filePath)
-        .pipe(lazyTasks.lazyStylelint())
+        .pipe(lazyTasks.stylelintTask())
         .pipe(sass())
         .on('error', function (err) {
           log(chalk.red(err.message));
@@ -212,20 +211,6 @@ gulp.task('watch', function () {
     } else {
       return gulp.start('sass:main');
     }
-  });
-
-  gulp.watch(['src/' + conf.PROJECT_NAME + '/js/**/*.component.html'], function (
-    evt
-  ) {
-    let filePath = evt.path;
-    let part = (path.dirname(filePath) + '/')
-      .split('/src/' + conf.PROJECT_NAME + '/js/')
-      .pop();
-    log(chalk.cyan('[changed]'), filePath);
-    return gulp
-      .src(filePath)
-      .pipe(mt2amd({ngTemplate: true}))
-      .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js/' + part));
   });
 
   gulp.watch(['src/' + conf.PROJECT_NAME + '/js/**/*.tpl.xhtml'], function (

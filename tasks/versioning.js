@@ -67,7 +67,7 @@ gulp.task(
 // digest versioning html page
 gulp.task('versioning:page', function () {
   return gulp
-    .src(['dist/**/*.html', '!dist/**/*.component.html'])
+    .src(['dist/**/*.html'])
     .pipe(
       digestVersioning({
         digestLength: conf.VERSION_DIGEST_LEN,

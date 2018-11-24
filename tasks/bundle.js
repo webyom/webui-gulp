@@ -83,8 +83,7 @@ gulp.task('bundle:html:init', function () {
         'src/*.html',
         'src/' + conf.PROJECT_NAME + '/**/*.html',
         '!src/**/*.layout.html',
-        '!src/**/*.inc.html',
-        '!src/**/*.component.html'
+        '!src/**/*.inc.html'
       ],
       {base: 'src'}
     )
@@ -95,7 +94,7 @@ gulp.task('bundle:html:init', function () {
 // optimize html
 gulp.task('bundle:html:optimize', ['bundle:html:init'], function () {
   return gulp
-    .src(['dist/**/*.html', '!dist/**/*.component.html'])
+    .src(['dist/**/*.html'])
     .pipe(lazyTasks.lazyHtmlI18nTask())
     .pipe(htmlI18n.restorePath())
     .pipe(
@@ -141,7 +140,7 @@ gulp.task(
   ['bundle:html:optimize', 'bundle:gen-md5map'],
   function () {
     return gulp
-      .src(['dist/**/*.html', '!dist/**/*.component.html'])
+      .src(['dist/**/*.html'])
       .pipe(
         propertyMerge({
           properties: Object.assign(
