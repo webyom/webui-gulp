@@ -113,15 +113,19 @@ gulp.task('html', function () {
     .pipe(gulp.dest('dist'));
 });
 
-// lesshint
-gulp.task('lesshint', function () {
+// stylelint
+gulp.task('stylelint', function () {
   return gulp
     .src([
-      'src/' + conf.PROJECT_NAME + '/css/app/**/*.less',
-      'src/' + conf.PROJECT_NAME + '/js/**/*.less'
+      'src/' + conf.PROJECT_NAME + '/css/**/*.less',
+      '!src/' + conf.PROJECT_NAME + '/css/vendor/**/*.less',
+      'src/' + conf.PROJECT_NAME + '/js/**/*.less',
+      'src/' + conf.PROJECT_NAME + '/css/**/*.scss',
+      '!src/' + conf.PROJECT_NAME + '/css/vendor/**/*.scss',
+      'src/' + conf.PROJECT_NAME + '/js/**/*.scss'
     ])
     .pipe(
-      cache('lesshint', 'src', lazyTasks.lazyLesshint, {writeCache: false})
+      cache('stylelint', 'src', lazyTasks.lazyStylelint, {writeCache: false})
     );
 });
 
@@ -129,7 +133,7 @@ gulp.task('lesshint', function () {
 gulp.task('less', ['less:main', 'less:component']);
 
 // compile main less
-gulp.task('less:main', ['lesshint'], function (done) {
+gulp.task('less:main', ['stylelint'], function (done) {
   return gulp
     .src([
       'src/' + conf.PROJECT_NAME + '/css/**/*-main.less',
@@ -147,7 +151,7 @@ gulp.task('less:main', ['lesshint'], function (done) {
 });
 
 // compile component less
-gulp.task('less:component', ['lesshint'], function (done) {
+gulp.task('less:component', ['stylelint'], function (done) {
   return gulp
     .src(['src/' + conf.PROJECT_NAME + '/js/**/*.less'])
     .pipe(cache('less:component', 'src', lazyTasks.lessComponentTask))
@@ -161,7 +165,7 @@ gulp.task('less:component', ['lesshint'], function (done) {
 gulp.task('sass', ['sass:main', 'sass:component']);
 
 // compile main sass
-gulp.task('sass:main', function (done) {
+gulp.task('sass:main', ['stylelint'], function (done) {
   return gulp
     .src([
       'src/' + conf.PROJECT_NAME + '/css/**/*-main.scss',
@@ -179,7 +183,7 @@ gulp.task('sass:main', function (done) {
 });
 
 // compile component sass
-gulp.task('sass:component', function (done) {
+gulp.task('sass:component', ['stylelint'], function (done) {
   return gulp
     .src(['src/' + conf.PROJECT_NAME + '/js/**/*.scss'])
     .pipe(cache('scss:component', 'src', lazyTasks.sassComponentTask))

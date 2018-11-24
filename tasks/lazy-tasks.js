@@ -20,7 +20,7 @@ const path = require('path'),
   postcssCssnext = require('postcss-cssnext'),
   through = require('through2'),
   htmlI18n = require('gulp-html-i18n'),
-  lesshint = require('gulp-lesshint'),
+  stylelint = require('gulp-stylelint'),
   rename = require('gulp-rename'),
   htmlOptimizer = require('gulp-html-optimizer'),
   propertyMerge = require('gulp-property-merge');
@@ -95,46 +95,12 @@ exports.lazyInitHtmlTask = lazypipe()
   )
   .pipe(exports.lazyHtmlI18nTask);
 
-exports.lazyLesshint = lazypipe()
-  .pipe(lesshint)
-  .pipe(function () {
-    let count = 0;
-    return through
-      .obj(function (file, enc, callback) {
-        if (file.lesshint && !file.lesshint.success) {
-          file.lesshint.results.forEach(function (result) {
-            let output = '';
-            if (result.severity === 'error') {
-              output += chalk.red('Error: ');
-            } else {
-              output += chalk.yellow('Warning: ');
-            }
-            output
-              += chalk.cyan(path.relative(process.cwd(), file.path)) + ': ';
-            if (result.line) {
-              output += chalk.magenta('line ' + result.line) + ', ';
-            }
-            if (result.column) {
-              output += chalk.magenta('col ' + result.column) + ', ';
-            }
-            output += chalk.green(result.linter) + ': ';
-            output += result.message;
-            log(output);
-            count++;
-          });
-        }
-        return callback(null, file);
-      })
-      .on('finish', function (x) {
-        if (count) {
-          throw new PluginError('gulp-lesshint', {
-            name: 'LesshintError',
-            message:
-              'Failed with ' + count + (count === 1 ? ' error' : ' errors')
-          });
-        }
-      });
-  });
+exports.lazyStylelint = lazypipe().pipe(
+  stylelint,
+  {
+    reporters: [{formatter: 'string', console: true}]
+  }
+);
 
 exports.eslintTask = lazypipe()
   .pipe(

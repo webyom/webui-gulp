@@ -138,7 +138,7 @@ gulp.task('watch', function () {
     if (/(^|-)main\.less$/.test(path.basename(filePath)) || isComponent) {
       return gulp
         .src(filePath)
-        .pipe(lazyTasks.lazyLesshint())
+        .pipe(lazyTasks.lazyStylelint())
         .pipe(less())
         .on('error', function (err) {
           log(chalk.red(err.message));
@@ -181,6 +181,7 @@ gulp.task('watch', function () {
     if (/(^|-)main\.scss$/.test(path.basename(filePath)) || isComponent) {
       return gulp
         .src(filePath)
+        .pipe(lazyTasks.lazyStylelint())
         .pipe(sass())
         .on('error', function (err) {
           log(chalk.red(err.message));
