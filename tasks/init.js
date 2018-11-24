@@ -2,6 +2,7 @@ const exec = require('child_process').exec,
   gulp = require('gulp'),
   conf = require('./conf'),
   less = require('gulp-less'),
+  sass = require('gulp-sass'),
   mt2amd = require('gulp-mt2amd'),
   cache = require('./cache'),
   through = require('through2'),
@@ -112,11 +113,23 @@ gulp.task('html', function () {
     .pipe(gulp.dest('dist'));
 });
 
+// lesshint
+gulp.task('lesshint', function () {
+  return gulp
+    .src([
+      'src/' + conf.PROJECT_NAME + '/css/app/**/*.less',
+      'src/' + conf.PROJECT_NAME + '/js/**/*.less'
+    ])
+    .pipe(
+      cache('lesshint', 'src', lazyTasks.lazyLesshint, {writeCache: false})
+    );
+});
+
 // compile less
-gulp.task('less', ['less-main', 'less-component']);
+gulp.task('less', ['less:main', 'less:component']);
 
 // compile main less
-gulp.task('less-main', ['lesshint'], function (done) {
+gulp.task('less:main', ['lesshint'], function (done) {
   return gulp
     .src([
       'src/' + conf.PROJECT_NAME + '/css/**/*-main.less',
@@ -134,26 +147,46 @@ gulp.task('less-main', ['lesshint'], function (done) {
 });
 
 // compile component less
-gulp.task('less-component', ['lesshint'], function (done) {
+gulp.task('less:component', ['lesshint'], function (done) {
   return gulp
     .src(['src/' + conf.PROJECT_NAME + '/js/**/*.less'])
-    .pipe(cache('less-component', 'src', lazyTasks.lessComponentTask))
+    .pipe(cache('less:component', 'src', lazyTasks.lessComponentTask))
     .on('error', function (err) {
       done(err);
     })
     .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js'));
 });
 
-// lesshint
-gulp.task('lesshint', function () {
+// compile sass
+gulp.task('sass', ['sass:main', 'sass:component']);
+
+// compile main sass
+gulp.task('sass:main', function (done) {
   return gulp
     .src([
-      'src/' + conf.PROJECT_NAME + '/css/app/**/*.less',
-      'src/' + conf.PROJECT_NAME + '/js/**/*.less'
+      'src/' + conf.PROJECT_NAME + '/css/**/*-main.scss',
+      'src/' + conf.PROJECT_NAME + '/css/**/main.scss'
     ])
-    .pipe(
-      cache('lesshint', 'src', lazyTasks.lazyLesshint, {writeCache: false})
-    );
+    .pipe(sass())
+    .on('error', function (err) {
+      done(err);
+    })
+    .pipe(lazyTasks.lazyPostcssTask())
+    .on('error', function (err) {
+      done(err);
+    })
+    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/css'));
+});
+
+// compile component sass
+gulp.task('sass:component', function (done) {
+  return gulp
+    .src(['src/' + conf.PROJECT_NAME + '/js/**/*.scss'])
+    .pipe(cache('scss:component', 'src', lazyTasks.sassComponentTask))
+    .on('error', function (err) {
+      done(err);
+    })
+    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js'));
 });
 
 // compile micro template

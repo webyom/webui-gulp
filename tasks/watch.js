@@ -8,6 +8,7 @@ const path = require('path'),
   gulpif = require('gulp-if'),
   conf = require('./conf'),
   less = require('gulp-less'),
+  sass = require('gulp-sass'),
   eslint = require('gulp-eslint'),
   mt2amd = require('gulp-mt2amd'),
   rename = require('gulp-rename'),
@@ -166,7 +167,49 @@ gulp.task('watch', function () {
         )
         .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/' + part));
     } else {
-      return gulp.start('less-main');
+      return gulp.start('less:main');
+    }
+  });
+
+  gulp.watch(['src/' + conf.PROJECT_NAME + '/**/*.scss'], function (evt) {
+    let filePath = evt.path;
+    let part = (path.dirname(filePath) + '/')
+      .split('/src/' + conf.PROJECT_NAME + '/')
+      .pop();
+    let isComponent = filePath.indexOf('/js/') > 0;
+    log(chalk.cyan('[changed]'), filePath);
+    if (/(^|-)main\.scss$/.test(path.basename(filePath)) || isComponent) {
+      return gulp
+        .src(filePath)
+        .pipe(sass())
+        .on('error', function (err) {
+          log(chalk.red(err.message));
+        })
+        .pipe(lazyTasks.lazyPostcssTask())
+        .on('error', function (err) {
+          log(chalk.red(err.message));
+        })
+        .pipe(
+          gulpif(
+            isComponent,
+            mt2amd({
+              cssModuleClassNameGenerator: util.cssModuleClassNameGenerator,
+              useExternalCssModuleHelper: !conf.IS_NG_PROJECT,
+              ngStyle: conf.IS_NG_PROJECT
+            })
+          )
+        )
+        .pipe(
+          gulpif(
+            isComponent,
+            rename(function (file) {
+              file.basename = file.basename.replace(/\.css$/, '.scss');
+            })
+          )
+        )
+        .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/' + part));
+    } else {
+      return gulp.start('sass:main');
     }
   });
 

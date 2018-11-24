@@ -10,6 +10,7 @@ const path = require('path'),
   babel = require('gulp-babel'),
   ts = require('gulp-typescript'),
   less = require('gulp-less'),
+  sass = require('gulp-sass'),
   mt2amd = require('gulp-mt2amd'),
   util = require('./util'),
   envify = require('gulp-envify'),
@@ -194,5 +195,23 @@ exports.lessComponentTask = lazypipe()
     rename,
     function (file) {
       file.basename = file.basename.replace(/\.css$/, '.less');
+    }
+  );
+
+exports.sassComponentTask = lazypipe()
+  .pipe(sass)
+  .pipe(exports.lazyPostcssTask)
+  .pipe(
+    mt2amd,
+    {
+      cssModuleClassNameGenerator: util.cssModuleClassNameGenerator,
+      useExternalCssModuleHelper: !conf.IS_NG_PROJECT,
+      ngStyle: conf.IS_NG_PROJECT
+    }
+  )
+  .pipe(
+    rename,
+    function (file) {
+      file.basename = file.basename.replace(/\.css$/, '.sass');
     }
   );
