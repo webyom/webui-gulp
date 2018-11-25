@@ -178,6 +178,6 @@ exports.sassComponentTask = lazypipe()
   .pipe(
     rename,
     function (file) {
-      file.basename = file.basename.replace(/\.css$/, '.sass');
+      file.basename = file.basename.replace(/\.css$/, '.scss');
     }
   );
