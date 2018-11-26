@@ -61,3 +61,17 @@ exports.getExcutablePath = function (name) {
   }
   return executable;
 };
+
+exports.appendSrcExclusion = function (src) {
+  if (!Array.isArray(src)) {
+    src = [src];
+  }
+  const exclusion = ['!dist/**/_vendor/**/*'];
+  if (src[0].split('/')[0] != 'dist') {
+    exclusion.push('!src/**/_vendor/**/*', '!src/app/**/*', '!src/base/**/*');
+    if (!conf.IS_BASE_PROJECT) {
+      exclusion.push('!src/' + conf.BASE_PROJECT_NAME + '/**/*');
+    }
+  }
+  return src.concat(exclusion);
+};

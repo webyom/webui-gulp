@@ -21,30 +21,31 @@ gulp.task('bundle', ['bundle:amd', 'bundle:html']);
 // bundle amd modules
 gulp.task('bundle:amd', ['bundle:html:optimize'], function () {
   return gulp
-    .src([
-      'dist/' + conf.PROJECT_NAME + '/js/**/*-main.js',
-      'dist/' + conf.PROJECT_NAME + '/js/**/main.js',
-      '!dist/' + conf.PROJECT_NAME + '/js/vendor/**/main.js'
-    ])
+    .src(
+      util.appendSrcExclusion([
+        'dist/' + conf.PROJECT_NAME + '/**/*-main.js',
+        'dist/' + conf.PROJECT_NAME + '/**/main.js'
+      ])
+    )
     .pipe(
       amdBundler({
         isRelativeDependency: util.isRelativeDependency
       })
     )
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js'));
+    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
 });
 
 // generate md5map for async loaded js
 gulp.task('bundle:gen-md5map', ['bundle:amd'], function (done) {
   gulp
     .src([
-      'dist/' + conf.BASE_PROJECT_NAME + '/js/**/*-main.+(js|json.js)',
-      'dist/' + conf.BASE_PROJECT_NAME + '/js/**/main.+(js|json.js)',
-      'dist/' + conf.BASE_PROJECT_NAME + '/js/vendor/**/*.js',
+      'dist/' + conf.BASE_PROJECT_NAME + '/**/*-main.+(js|json.js)',
+      'dist/' + conf.BASE_PROJECT_NAME + '/**/main.+(js|json.js)',
+      'dist/' + conf.BASE_PROJECT_NAME + '/**/_vendor/**/*.js',
       'dist/' + conf.BASE_PROJECT_NAME + '/js/lang/**/*.js',
-      'dist/' + conf.PROJECT_NAME + '/js/**/*-main.+(js|json.js)',
-      'dist/' + conf.PROJECT_NAME + '/js/**/main.+(js|json.js)',
-      'dist/' + conf.PROJECT_NAME + '/js/vendor/**/*.js',
+      'dist/' + conf.PROJECT_NAME + '/**/*-main.+(js|json.js)',
+      'dist/' + conf.PROJECT_NAME + '/**/main.+(js|json.js)',
+      'dist/' + conf.PROJECT_NAME + '/**/vendor/**/*.js',
       'dist/' + conf.PROJECT_NAME + '/js/lang/**/*.js'
     ])
     .pipe(
@@ -79,12 +80,13 @@ gulp.task('bundle:gen-md5map', ['bundle:amd'], function (done) {
 gulp.task('bundle:html:init', function () {
   return gulp
     .src(
-      [
+      util.appendSrcExclusion([
         'src/*.html',
         'src/' + conf.PROJECT_NAME + '/**/*.html',
         '!src/**/*.layout.html',
-        '!src/**/*.inc.html'
-      ],
+        '!src/**/*.inc.html',
+        '!src/**/*.tpl.html'
+      ]),
       {base: 'src'}
     )
     .pipe(htmlOptimizer({processRequire: false}))

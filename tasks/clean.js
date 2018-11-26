@@ -11,9 +11,5 @@ gulp.task('clean-cache', function () {
 });
 
 gulp.task('clean-bundle', function () {
-  return del([
-    'dist/**/__tests__/',
-    'dist/' + conf.PROJECT_NAME + '/js/**/*.css',
-    '!dist/' + conf.PROJECT_NAME + '/js/vendor/**/*.css'
-  ]);
+  return del(['dist/**/__tests__/']);
 });

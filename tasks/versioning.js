@@ -1,6 +1,7 @@
 const path = require('path'),
   gulp = require('gulp'),
   conf = require('./conf'),
+  util = require('./util'),
   digestVersioning = require('gulp-digest-versioning');
 
 function fixUrl(fileName, relPath, basePath) {
@@ -14,7 +15,7 @@ function fixUrl(fileName, relPath, basePath) {
 // digest versioning template and css
 gulp.task('versioning:vendor-css', function () {
   return gulp
-    .src(['dist/' + conf.BASE_PROJECT_NAME + '/css/vendor/**/*.css'])
+    .src(['dist/**/_vendor/**/*.css'], {base: 'dist'})
     .pipe(
       digestVersioning({
         digestLength: conf.VERSION_DIGEST_LEN,
@@ -22,15 +23,12 @@ gulp.task('versioning:vendor-css', function () {
         fixUrl: fixUrl
       })
     )
-    .pipe(gulp.dest('dist/' + conf.BASE_PROJECT_NAME + '/css/vendor'));
+    .pipe(gulp.dest('dist'));
 });
 
 gulp.task('versioning:app-css', function () {
   return gulp
-    .src([
-      'dist/' + conf.PROJECT_NAME + '/css/**/*.css',
-      '!dist/' + conf.PROJECT_NAME + '/css/vendor/**/*.css'
-    ])
+    .src(util.appendSrcExclusion(['dist/' + conf.PROJECT_NAME + '/**/*.css']))
     .pipe(
       digestVersioning({
         digestLength: conf.VERSION_DIGEST_LEN,
@@ -38,15 +36,16 @@ gulp.task('versioning:app-css', function () {
         fixUrl: fixUrl
       })
     )
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/css'));
+    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
 });
 
-gulp.task('versioning:template', function () {
+gulp.task('versioning:component-css', function () {
   return gulp
-    .src([
-      'dist/' + conf.PROJECT_NAME + '/js/**/*.css.js',
-      '!dist/' + conf.PROJECT_NAME + '/js/vendor/**/*.css.js'
-    ])
+    .src(
+      util.appendSrcExclusion([
+        'dist/' + conf.PROJECT_NAME + '/**/*.+(less.js|scss.js)'
+      ])
+    )
     .pipe(
       digestVersioning({
         digestLength: conf.VERSION_DIGEST_LEN,
@@ -54,14 +53,18 @@ gulp.task('versioning:template', function () {
         fixUrl: fixUrl
       })
     )
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js'));
+    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
 });
 
 gulp.task(
   'versioning:asset',
   conf.IS_BASE_PROJECT
-    ? ['versioning:app-css', 'versioning:template']
-    : ['versioning:vendor-css', 'versioning:app-css', 'versioning:template']
+    ? ['versioning:app-css', 'versioning:component-css']
+    : [
+      'versioning:vendor-css',
+      'versioning:app-css',
+      'versioning:component-css'
+    ]
 );
 
 // digest versioning html page

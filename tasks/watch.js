@@ -22,12 +22,13 @@ gulp.task('watch', function () {
   });
 
   gulp.watch(
-    [
+    util.appendSrcExclusion([
       'src/*.html',
       'src/' + conf.PROJECT_NAME + '/**/*.html',
       '!src/**/*.layout.html',
-      '!src/**/*.inc.html'
-    ],
+      '!src/**/*.inc.html',
+      '!src/**/*.tpl.html'
+    ]),
     function (evt) {
       let filePath = evt.path;
       let part = (path.dirname(filePath) + '/').split('/src/').pop();
@@ -45,27 +46,30 @@ gulp.task('watch', function () {
     return gulp.start('html');
   });
 
-  gulp.watch(['src/' + conf.PROJECT_NAME + '/js/**/*.json'], function (evt) {
-    let filePath = evt.path;
-    let part = (path.dirname(filePath) + '/')
-      .split('/src/' + conf.PROJECT_NAME + '/js/')
-      .pop();
-    log(chalk.cyan('[changed]'), filePath);
-    return gulp
-      .src(filePath)
-      .pipe(mt2amd())
-      .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js/' + part));
-  });
-
   gulp.watch(
-    [
-      'src/' + conf.PROJECT_NAME + '/js/**/*.+(js|jsx)',
-      '!src/' + conf.PROJECT_NAME + '/js/vendor/**/*'
-    ],
+    util.appendSrcExclusion([
+      'src/' + conf.PROJECT_NAME + '/**/*.json',
+      '!src/' + conf.PROJECT_NAME + '/js/lang/**/*'
+    ]),
     function (evt) {
       let filePath = evt.path;
       let part = (path.dirname(filePath) + '/')
-        .split('/src/' + conf.PROJECT_NAME + '/js/')
+        .split('/src/' + conf.PROJECT_NAME + '/')
+        .pop();
+      log(chalk.cyan('[changed]'), filePath);
+      return gulp
+        .src(filePath)
+        .pipe(mt2amd())
+        .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/' + part));
+    }
+  );
+
+  gulp.watch(
+    util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.+(js|jsx)']),
+    function (evt) {
+      let filePath = evt.path;
+      let part = (path.dirname(filePath) + '/')
+        .split('/src/' + conf.PROJECT_NAME + '/')
         .pop();
       log(chalk.cyan('[changed]'), filePath);
       return gulp
@@ -73,37 +77,31 @@ gulp.task('watch', function () {
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(lazyTasks.babelTask())
-        .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js/' + part));
+        .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/' + part));
     }
   );
 
   gulp.watch(
-    [
-      'src/' + conf.PROJECT_NAME + '/js/**/*.ts',
-      '!src/' + conf.PROJECT_NAME + '/js/vendor/**/*'
-    ],
+    util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.ts']),
     function (evt) {
       let filePath = evt.path;
       let part = (path.dirname(filePath) + '/')
-        .split('/src/' + conf.PROJECT_NAME + '/js/')
+        .split('/src/' + conf.PROJECT_NAME + '/')
         .pop();
       log(chalk.cyan('[changed]'), filePath);
       return gulp
         .src(filePath)
         .pipe(lazyTasks.tsTask())
-        .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js/' + part));
+        .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/' + part));
     }
   );
 
   gulp.watch(
-    [
-      'src/' + conf.PROJECT_NAME + '/js/**/*.vue',
-      '!src/' + conf.PROJECT_NAME + '/js/vendor/**/*'
-    ],
+    util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.vue']),
     function (evt) {
       let filePath = evt.path;
       let part = (path.dirname(filePath) + '/')
-        .split('/src/' + conf.PROJECT_NAME + '/js/')
+        .split('/src/' + conf.PROJECT_NAME + '/')
         .pop();
       log(chalk.cyan('[changed]'), filePath);
       return gulp
@@ -111,7 +109,7 @@ gulp.task('watch', function () {
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(lazyTasks.vueifyTask())
-        .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js/' + part));
+        .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/' + part));
     }
   );
 
@@ -127,95 +125,99 @@ gulp.task('watch', function () {
     }
   );
 
-  gulp.watch(['src/' + conf.PROJECT_NAME + '/**/*.less'], function (evt) {
-    let filePath = evt.path;
-    let part = (path.dirname(filePath) + '/')
-      .split('/src/' + conf.PROJECT_NAME + '/')
-      .pop();
-    let isComponent = filePath.indexOf('/js/') > 0;
-    log(chalk.cyan('[changed]'), filePath);
-    if (/(^|-)main\.less$/.test(path.basename(filePath)) || isComponent) {
-      return gulp
-        .src(filePath)
-        .pipe(lazyTasks.stylelintTask())
-        .pipe(less())
-        .on('error', function (err) {
-          log(chalk.red(err.message));
-        })
-        .pipe(lazyTasks.lazyPostcssTask())
-        .on('error', function (err) {
-          log(chalk.red(err.message));
-        })
-        .pipe(
-          gulpif(
-            isComponent,
-            mt2amd({
-              cssModuleClassNameGenerator: util.cssModuleClassNameGenerator,
-              useExternalCssModuleHelper: !conf.IS_NG_PROJECT,
-              ngStyle: conf.IS_NG_PROJECT
-            })
+  gulp.watch(
+    util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.less']),
+    function (evt) {
+      let filePath = evt.path;
+      let part = (path.dirname(filePath) + '/')
+        .split('/src/' + conf.PROJECT_NAME + '/')
+        .pop();
+      let isComponent = (/(^|-)style\.less$/).test(filePath);
+      log(chalk.cyan('[changed]'), filePath);
+      if (/(^|-)main\.less$/.test(path.basename(filePath)) || isComponent) {
+        return gulp
+          .src(filePath)
+          .pipe(lazyTasks.stylelintTask())
+          .pipe(less())
+          .on('error', function (err) {
+            log(chalk.red(err.message));
+          })
+          .pipe(lazyTasks.lazyPostcssTask())
+          .on('error', function (err) {
+            log(chalk.red(err.message));
+          })
+          .pipe(
+            gulpif(
+              isComponent,
+              mt2amd({
+                cssModuleClassNameGenerator: util.cssModuleClassNameGenerator,
+                useExternalCssModuleHelper: !conf.IS_NG_PROJECT,
+                ngStyle: conf.IS_NG_PROJECT
+              })
+            )
           )
-        )
-        .pipe(
-          gulpif(
-            isComponent,
-            rename(function (file) {
-              file.basename = file.basename.replace(/\.css$/, '.less');
-            })
+          .pipe(
+            gulpif(
+              isComponent,
+              rename(function (file) {
+                file.basename = file.basename.replace(/\.css$/, '.less');
+              })
+            )
           )
-        )
-        .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/' + part));
-    } else {
-      return gulp.start('less:main');
+          .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/' + part));
+      } else {
+        return gulp.start('less:main');
+      }
     }
-  });
+  );
 
-  gulp.watch(['src/' + conf.PROJECT_NAME + '/**/*.scss'], function (evt) {
-    let filePath = evt.path;
-    let part = (path.dirname(filePath) + '/')
-      .split('/src/' + conf.PROJECT_NAME + '/')
-      .pop();
-    let isComponent = filePath.indexOf('/js/') > 0;
-    log(chalk.cyan('[changed]'), filePath);
-    if (/(^|-)main\.scss$/.test(path.basename(filePath)) || isComponent) {
-      return gulp
-        .src(filePath)
-        .pipe(lazyTasks.stylelintTask())
-        .pipe(sass())
-        .on('error', function (err) {
-          log(chalk.red(err.message));
-        })
-        .pipe(lazyTasks.lazyPostcssTask())
-        .on('error', function (err) {
-          log(chalk.red(err.message));
-        })
-        .pipe(
-          gulpif(
-            isComponent,
-            mt2amd({
-              cssModuleClassNameGenerator: util.cssModuleClassNameGenerator,
-              useExternalCssModuleHelper: !conf.IS_NG_PROJECT,
-              ngStyle: conf.IS_NG_PROJECT
-            })
+  gulp.watch(
+    util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.scss']),
+    function (evt) {
+      let filePath = evt.path;
+      let part = (path.dirname(filePath) + '/')
+        .split('/src/' + conf.PROJECT_NAME + '/')
+        .pop();
+      let isComponent = (/(^|-)style\.scss$/).test(filePath);
+      log(chalk.cyan('[changed]'), filePath);
+      if (/(^|-)main\.scss$/.test(path.basename(filePath)) || isComponent) {
+        return gulp
+          .src(filePath)
+          .pipe(lazyTasks.stylelintTask())
+          .pipe(sass())
+          .on('error', function (err) {
+            log(chalk.red(err.message));
+          })
+          .pipe(lazyTasks.lazyPostcssTask())
+          .on('error', function (err) {
+            log(chalk.red(err.message));
+          })
+          .pipe(
+            gulpif(
+              isComponent,
+              mt2amd({
+                cssModuleClassNameGenerator: util.cssModuleClassNameGenerator,
+                useExternalCssModuleHelper: !conf.IS_NG_PROJECT,
+                ngStyle: conf.IS_NG_PROJECT
+              })
+            )
           )
-        )
-        .pipe(
-          gulpif(
-            isComponent,
-            rename(function (file) {
-              file.basename = file.basename.replace(/\.css$/, '.scss');
-            })
+          .pipe(
+            gulpif(
+              isComponent,
+              rename(function (file) {
+                file.basename = file.basename.replace(/\.css$/, '.scss');
+              })
+            )
           )
-        )
-        .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/' + part));
-    } else {
-      return gulp.start('sass:main');
+          .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/' + part));
+      } else {
+        return gulp.start('sass:main');
+      }
     }
-  });
+  );
 
-  gulp.watch(['src/' + conf.PROJECT_NAME + '/js/**/*.tpl.xhtml'], function (
-    evt
-  ) {
+  gulp.watch(['src/' + conf.PROJECT_NAME + '/**/*.tpl.html'], function (evt) {
     let filePath = evt.path;
     log(chalk.cyan('[changed]'), filePath);
     return gulp.start('mt');

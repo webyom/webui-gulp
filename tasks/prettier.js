@@ -34,26 +34,24 @@ function prettier({logFile} = {}) {
 gulp.task('prettier', function () {
   return gulp
     .src(
-      util.getChangedFiles().filter(function (item) {
-        return (
-          item.indexOf('src/' + conf.PROJECT_NAME + '/js/' === 0)
-          && (/\.(js|jsx)$/i).test(item)
-        );
-      }),
-      {base: 'src/' + conf.PROJECT_NAME + '/js'}
+      util.appendSrcExclusion(
+        util.getChangedFiles().filter(function (item) {
+          return (
+            item.indexOf('src/' + conf.PROJECT_NAME + '/' === 0)
+            && (/\.(js|jsx)$/i).test(item)
+          );
+        })
+      ),
+      {base: 'src'}
     )
     .pipe(prettier({logFile: true}))
-    .pipe(gulp.dest('src/' + conf.PROJECT_NAME + '/js'));
+    .pipe(gulp.dest('src'));
 });
 
 gulp.task('prettier-all', function () {
   return gulp
     .src(
-      [
-        'src/' + conf.PROJECT_NAME + '/js/**/*.+(js|jsx)',
-        '!src/' + conf.PROJECT_NAME + '/js/vendor/**/*'
-      ],
-      {base: 'src/' + conf.PROJECT_NAME + '/js'}
+      util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.+(js|jsx)'])
     )
     .pipe(
       cache('prettier-all', 'src', prettier, {
@@ -61,7 +59,7 @@ gulp.task('prettier-all', function () {
         targetExtName: 0
       })
     )
-    .pipe(gulp.dest('src/' + conf.PROJECT_NAME + '/js'));
+    .pipe(gulp.dest('src/' + conf.PROJECT_NAME));
 });
 
 exports.prettier = prettier;

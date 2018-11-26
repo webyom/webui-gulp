@@ -15,11 +15,10 @@ gulp.task('eslint', function () {
   let errorCount = 0;
   let stream = gulp
     .src(
-      [
-        'src/' + conf.PROJECT_NAME + '/js/**/*.+(js|jsx|vue)',
-        '!src/' + conf.PROJECT_NAME + '/js/vendor/**/*'
-      ],
-      {base: 'src/js'}
+      util.appendSrcExclusion([
+        'src/' + conf.PROJECT_NAME + '/**/*.+(js|jsx|vue)'
+      ]),
+      {base: 'src'}
     )
     .pipe(
       conf.ESLINT_FIX
@@ -47,65 +46,61 @@ gulp.task('eslint', function () {
       }
     });
   if (conf.ESLINT_FIX) {
-    stream = stream.pipe(gulp.dest('src/' + conf.PROJECT_NAME + '/js'));
+    stream = stream.pipe(gulp.dest('src/' + conf.PROJECT_NAME));
   }
   return stream;
 });
 
 // convert json into AMD format
-gulp.task('json', ['i18n:validate'], function () {
+gulp.task('json', function () {
   return gulp
-    .src([
-      'src/' + conf.PROJECT_NAME + '/js/**/*.json',
-      '!src/' + conf.PROJECT_NAME + '/js/lang/**/*'
-    ])
+    .src(
+      util.appendSrcExclusion([
+        'src/' + conf.PROJECT_NAME + '/**/*.json',
+        '!src/' + conf.PROJECT_NAME + '/js/lang/**/*'
+      ])
+    )
     .pipe(mt2amd())
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js'));
+    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
 });
 
 // babel
 gulp.task('babel', ['eslint'], function () {
   return gulp
-    .src([
-      'src/' + conf.PROJECT_NAME + '/js/**/*.+(js|jsx)',
-      '!src/' + conf.PROJECT_NAME + '/js/vendor/**/*'
-    ])
+    .src(
+      util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.+(js|jsx)'])
+    )
     .pipe(cache('babel', 'src', lazyTasks.babelTask))
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js'));
+    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
 });
 
 // ts
 gulp.task('ts', function () {
   return gulp
-    .src([
-      'src/' + conf.PROJECT_NAME + '/js/**/*.ts',
-      '!src/' + conf.PROJECT_NAME + '/js/vendor/**/*'
-    ])
+    .src(util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.ts']))
     .pipe(cache('ts', 'src', lazyTasks.tsTask))
-    .pipe(gulp.dest('dist/js'));
+    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
 });
 
 // vueify
 gulp.task('vueify', ['eslint'], function () {
   return gulp
-    .src([
-      'src/' + conf.PROJECT_NAME + '/js/**/*.vue',
-      '!src/' + conf.PROJECT_NAME + '/js/vendor/**/*'
-    ])
+    .src(util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.vue']))
     .pipe(cache('vueify', 'src', lazyTasks.vueifyTask))
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js'));
+    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
 });
 
 // move html
 gulp.task('html', function () {
   return gulp
     .src(
-      [
+      util.appendSrcExclusion([
         'src/*.html',
         'src/' + conf.PROJECT_NAME + '/**/*.html',
         '!src/**/*.layout.html',
-        '!src/**/*.inc.html'
-      ],
+        '!src/**/*.inc.html',
+        '!src/**/*.tpl.html'
+      ]),
       {base: 'src'}
     )
     .pipe(lazyTasks.lazyInitHtmlTask())
@@ -115,14 +110,11 @@ gulp.task('html', function () {
 // stylelint
 gulp.task('stylelint', function () {
   return gulp
-    .src([
-      'src/' + conf.PROJECT_NAME + '/css/**/*.less',
-      '!src/' + conf.PROJECT_NAME + '/css/vendor/**/*.less',
-      'src/' + conf.PROJECT_NAME + '/js/**/*.less',
-      'src/' + conf.PROJECT_NAME + '/css/**/*.scss',
-      '!src/' + conf.PROJECT_NAME + '/css/vendor/**/*.scss',
-      'src/' + conf.PROJECT_NAME + '/js/**/*.scss'
-    ])
+    .src(
+      util.appendSrcExclusion([
+        'src/' + conf.PROJECT_NAME + '/**/*.+(less|scss)'
+      ])
+    )
     .pipe(
       cache('stylelint', 'src', lazyTasks.stylelintTask, {writeCache: false})
     );
@@ -134,10 +126,12 @@ gulp.task('less', ['less:main', 'less:component']);
 // compile main less
 gulp.task('less:main', ['stylelint'], function (done) {
   return gulp
-    .src([
-      'src/' + conf.PROJECT_NAME + '/css/**/*-main.less',
-      'src/' + conf.PROJECT_NAME + '/css/**/main.less'
-    ])
+    .src(
+      util.appendSrcExclusion([
+        'src/' + conf.PROJECT_NAME + '/**/*-main.less',
+        'src/' + conf.PROJECT_NAME + '/**/main.less'
+      ])
+    )
     .pipe(less())
     .on('error', function (err) {
       done(err);
@@ -146,18 +140,23 @@ gulp.task('less:main', ['stylelint'], function (done) {
     .on('error', function (err) {
       done(err);
     })
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/css'));
+    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
 });
 
 // compile component less
 gulp.task('less:component', ['stylelint'], function (done) {
   return gulp
-    .src(['src/' + conf.PROJECT_NAME + '/js/**/*.less'])
+    .src(
+      util.appendSrcExclusion([
+        'src/' + conf.PROJECT_NAME + '/**/*-style.less',
+        'src/' + conf.PROJECT_NAME + '/**/style.less'
+      ])
+    )
     .pipe(cache('less:component', 'src', lazyTasks.lessComponentTask))
     .on('error', function (err) {
       done(err);
     })
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js'));
+    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
 });
 
 // compile sass
@@ -166,10 +165,12 @@ gulp.task('sass', ['sass:main', 'sass:component']);
 // compile main sass
 gulp.task('sass:main', ['stylelint'], function (done) {
   return gulp
-    .src([
-      'src/' + conf.PROJECT_NAME + '/css/**/*-main.scss',
-      'src/' + conf.PROJECT_NAME + '/css/**/main.scss'
-    ])
+    .src(
+      util.appendSrcExclusion([
+        'src/' + conf.PROJECT_NAME + '/**/*-main.scss',
+        'src/' + conf.PROJECT_NAME + '/**/main.scss'
+      ])
+    )
     .pipe(sass())
     .on('error', function (err) {
       done(err);
@@ -178,38 +179,48 @@ gulp.task('sass:main', ['stylelint'], function (done) {
     .on('error', function (err) {
       done(err);
     })
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/css'));
+    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
 });
 
 // compile component sass
 gulp.task('sass:component', ['stylelint'], function (done) {
   return gulp
-    .src(['src/' + conf.PROJECT_NAME + '/js/**/*.scss'])
+    .src(
+      util.appendSrcExclusion([
+        'src/' + conf.PROJECT_NAME + '/**/*-style.scss',
+        'src/' + conf.PROJECT_NAME + '/**/style.scss'
+      ])
+    )
     .pipe(cache('scss:component', 'src', lazyTasks.sassComponentTask))
     .on('error', function (err) {
       done(err);
     })
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js'));
+    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
 });
 
 // compile micro template
 gulp.task('mt', function () {
   return gulp
-    .src(['src/' + conf.PROJECT_NAME + '/js/**/*.tpl.xhtml'])
-    .pipe(mt2amd())
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js'));
+    .src(
+      util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.tpl.html'])
+    )
+    .pipe(
+      cache('mt', 'src', function () {
+        return mt2amd();
+      })
+    )
+    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
 });
 
 // move img
 gulp.task('img', function () {
   return gulp
     .src(
-      [
-        'src/**/*.+(jpg|jpeg|gif|png|otf|eot|svg|ttf|woff|woff2|ico|mp3|swf|md)',
-        '!src/app/**/*',
-        '!src/base/**/*',
-        'src/' + conf.PROJECT_NAME + '/js/vendor/**/*'
-      ],
+      util.appendSrcExclusion([
+        'src/'
+          + conf.PROJECT_NAME
+          + '/**/*.+(jpg|jpeg|gif|png|otf|eot|svg|ttf|woff|woff2|ico|mp3|swf|md)'
+      ]),
       {base: 'src'}
     )
     .pipe(gulp.dest('dist'));
