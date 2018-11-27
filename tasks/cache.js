@@ -15,13 +15,10 @@ function replaceExtName(filePath, extName) {
   if (extName === 0) {
     return filePath;
   }
-  if (ext == '.jsx' || ext == '.vue') {
+  if (ext == '.js' || ext == '.jsx' || ext == '.vue') {
     extName = '.js';
-  } else if (ext == '.less' || ext == '.scss') {
+  } else {
     extName = ext + '.js';
-  }
-  if (!extName) {
-    return filePath;
   }
   if (ext) {
     filePath = filePath.slice(0, -ext.length) + extName;
