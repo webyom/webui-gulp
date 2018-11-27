@@ -39,13 +39,15 @@ gulp.task('bundle:amd', ['bundle:html:optimize'], function () {
 gulp.task('bundle:gen-md5map', ['bundle:amd'], function (done) {
   gulp
     .src([
-      'dist/' + conf.BASE_PROJECT_NAME + '/**/*-main.+(js|json.js)',
-      'dist/' + conf.BASE_PROJECT_NAME + '/**/main.+(js|json.js)',
+      'dist/'
+        + conf.BASE_PROJECT_NAME
+        + '/**/*-main.+(js|json.js|.tpl.html.js)',
+      'dist/' + conf.BASE_PROJECT_NAME + '/**/main.+(js|json.js|.tpl.html.js)',
       'dist/' + conf.BASE_PROJECT_NAME + '/**/_vendor/**/*.js',
       'dist/' + conf.BASE_PROJECT_NAME + '/js/lang/**/*.js',
-      'dist/' + conf.PROJECT_NAME + '/**/*-main.+(js|json.js)',
-      'dist/' + conf.PROJECT_NAME + '/**/main.+(js|json.js)',
-      'dist/' + conf.PROJECT_NAME + '/**/vendor/**/*.js',
+      'dist/' + conf.PROJECT_NAME + '/**/*-main.+(js|json.js|.tpl.html.js)',
+      'dist/' + conf.PROJECT_NAME + '/**/main.+(js|json.js|.tpl.html.js)',
+      'dist/' + conf.PROJECT_NAME + '/**/_vendor/**/*.js',
       'dist/' + conf.PROJECT_NAME + '/js/lang/**/*.js'
     ])
     .pipe(
