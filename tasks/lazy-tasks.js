@@ -16,7 +16,7 @@ const path = require('path'),
   envify = require('gulp-envify'),
   postcss = require('gulp-postcss'),
   postcssImport = require('postcss-import'),
-  postcssCssnext = require('postcss-cssnext'),
+  postcssPresetEnv = require('postcss-preset-env'),
   through = require('through2'),
   htmlI18n = require('gulp-html-i18n'),
   stylelint = require('gulp-stylelint'),
@@ -60,7 +60,7 @@ exports.lazyPostcssTask = lazypipe().pipe(
   postcss,
   [
     postcssImport(),
-    postcssCssnext({
+    postcssPresetEnv({
       browsers: ['last 4 versions', 'not ie <= 8']
     })
   ]
