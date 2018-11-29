@@ -15,7 +15,7 @@ function replaceExtName(filePath, extName) {
   if (extName === 0) {
     return filePath;
   }
-  if (ext == '.js' || ext == '.jsx' || ext == '.vue') {
+  if (ext == '.js' || ext == '.jsx') {
     extName = '.js';
   } else {
     extName = ext + '.js';

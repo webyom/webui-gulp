@@ -97,23 +97,6 @@ gulp.task('watch', function () {
   );
 
   gulp.watch(
-    util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.vue']),
-    function (evt) {
-      let filePath = evt.path;
-      let part = (path.dirname(filePath) + '/')
-        .split('/src/' + conf.PROJECT_NAME + '/')
-        .pop();
-      log(chalk.cyan('[changed]'), filePath);
-      return gulp
-        .src(filePath)
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(lazyTasks.vueifyTask())
-        .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/' + part));
-    }
-  );
-
-  gulp.watch(
     [
       'dist/' + conf.PROJECT_NAME + '/js/template/message/**/*.js',
       '!dist/' + conf.PROJECT_NAME + '/js/template/message/**/main.js'

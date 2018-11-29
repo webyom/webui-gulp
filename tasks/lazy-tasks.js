@@ -14,7 +14,6 @@ const path = require('path'),
   mt2amd = require('gulp-mt2amd'),
   util = require('./util'),
   envify = require('gulp-envify'),
-  vueify = require('gulp-vueify'),
   postcss = require('gulp-postcss'),
   postcssImport = require('postcss-import'),
   postcssCssnext = require('postcss-cssnext'),
@@ -136,15 +135,6 @@ exports.tsTask = lazypipe()
     envify,
     {NODE_ENV: conf.ENV}
   );
-
-exports.vueifyTask = lazypipe()
-  .pipe(exports.propertyMergeTask)
-  .pipe(vueify)
-  .pipe(
-    envify,
-    {NODE_ENV: conf.ENV}
-  )
-  .pipe(exports.lazyAmdWrapTask);
 
 exports.lessComponentTask = lazypipe()
   .pipe(less)

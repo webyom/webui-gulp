@@ -15,9 +15,7 @@ gulp.task('eslint', function () {
   let errorCount = 0;
   let stream = gulp
     .src(
-      util.appendSrcExclusion([
-        'src/' + conf.PROJECT_NAME + '/**/*.+(js|jsx|vue)'
-      ]),
+      util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.+(js|jsx)']),
       {base: 'src'}
     )
     .pipe(
@@ -79,14 +77,6 @@ gulp.task('ts', function () {
   return gulp
     .src(util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.ts']))
     .pipe(cache('ts', 'src', lazyTasks.tsTask))
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
-});
-
-// vueify
-gulp.task('vueify', ['eslint'], function () {
-  return gulp
-    .src(util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.vue']))
-    .pipe(cache('vueify', 'src', lazyTasks.vueifyTask))
     .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
 });
 
