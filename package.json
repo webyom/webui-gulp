@@ -1,6 +1,6 @@
 {
   "name": "webui-gulp",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "private": true,
   "description": "webui-gulp",
   "scripts": {},
@@ -32,7 +32,7 @@
     "gulp-vueify": "^0.0.3",
     "karma": "^2.0.0",
     "lazypipe": "^1.0.1",
-    "live-server": "^0.9.0",
+    "live-server": "^1.2.1",
     "marked": "^0.3.7",
     "mime": "^1.2.11",
     "plugin-error": "^1.0.0",
