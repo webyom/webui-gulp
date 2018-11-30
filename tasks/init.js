@@ -1,6 +1,7 @@
 const exec = require('child_process').exec,
   gulp = require('gulp'),
   conf = require('./conf'),
+  babel = require('gulp-babel'),
   less = require('gulp-less'),
   sass = require('gulp-sass'),
   mt2amd = require('gulp-mt2amd'),
@@ -196,7 +197,21 @@ gulp.task('mt', function () {
     )
     .pipe(
       cache('mt', 'src', function () {
-        return mt2amd();
+        return mt2amd({
+          strictMode: true,
+          babel: function (file) {
+            return new Promise(function (resolve, reject) {
+              const babelStream = babel({sourceType: 'script'});
+              babelStream.pipe(
+                through.obj(function (file, enc, next) {
+                  resolve(file);
+                })
+              );
+              babelStream.on('error', reject);
+              babelStream.end(file);
+            });
+          }
+        });
       })
     )
     .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
