@@ -115,7 +115,7 @@ gulp.task('watch', function () {
       let part = (path.dirname(filePath) + '/')
         .split('/src/' + conf.PROJECT_NAME + '/')
         .pop();
-      let isComponent = (/(^|-)style\.less$/).test(filePath);
+      let isComponent = (/(^|-)style\.less$/).test(path.basename(filePath));
       log(chalk.cyan('[changed]'), filePath);
       if (/(^|-)main\.less$/.test(path.basename(filePath)) || isComponent) {
         return gulp
@@ -161,7 +161,7 @@ gulp.task('watch', function () {
       let part = (path.dirname(filePath) + '/')
         .split('/src/' + conf.PROJECT_NAME + '/')
         .pop();
-      let isComponent = (/(^|-)style\.scss$/).test(filePath);
+      let isComponent = (/(^|-)style\.scss$/).test(path.basename(filePath));
       log(chalk.cyan('[changed]'), filePath);
       if (/(^|-)main\.scss$/.test(path.basename(filePath)) || isComponent) {
         return gulp
