@@ -4,7 +4,6 @@ const exec = require('child_process').exec,
   babel = require('gulp-babel'),
   less = require('gulp-less'),
   sass = require('gulp-sass'),
-  mt2amd = require('gulp-mt2amd'),
   cache = require('./cache'),
   through = require('through2'),
   PluginError = require('plugin-error'),
@@ -48,19 +47,6 @@ gulp.task('eslint', function () {
     stream = stream.pipe(gulp.dest('src/' + conf.PROJECT_NAME));
   }
   return stream;
-});
-
-// convert json into AMD format
-gulp.task('json', function () {
-  return gulp
-    .src(
-      util.appendSrcExclusion([
-        'src/' + conf.PROJECT_NAME + '/**/*.json',
-        '!src/' + conf.PROJECT_NAME + '/js/lang/**/*'
-      ])
-    )
-    .pipe(mt2amd())
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
 });
 
 // babel
@@ -189,34 +175,6 @@ gulp.task('sass:component', ['stylelint'], function (done) {
     .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
 });
 
-// compile micro template
-gulp.task('mt', function () {
-  return gulp
-    .src(
-      util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.tpl.html'])
-    )
-    .pipe(
-      cache('mt', 'src', function () {
-        return mt2amd({
-          strictMode: true,
-          babel: function (file) {
-            return new Promise(function (resolve, reject) {
-              const babelStream = babel({sourceType: 'script'});
-              babelStream.pipe(
-                through.obj(function (file, enc, next) {
-                  resolve(file);
-                })
-              );
-              babelStream.on('error', reject);
-              babelStream.end(file);
-            });
-          }
-        });
-      })
-    )
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
-});
-
 // move img
 gulp.task('img', function () {
   return gulp
@@ -224,7 +182,7 @@ gulp.task('img', function () {
       util.appendSrcExclusion([
         'src/'
           + conf.PROJECT_NAME
-          + '/**/*.+(jpg|jpeg|gif|png|otf|eot|svg|ttf|woff|woff2|ico|mp3|swf|md)'
+          + '/**/*.+(jpg|jpeg|gif|png|otf|eot|svg|ttf|woff|woff2|ico|mp3|swf)'
       ]),
       {base: 'src'}
     )
