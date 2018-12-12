@@ -80,6 +80,7 @@ exports.lazyInitHtmlTask = lazypipe()
     htmlOptimizer,
     {processRequire: false, cacheExtend: false}
   )
+  .pipe(exports.lazyHtmlI18nTask)
   .pipe(
     propertyMerge,
     {
@@ -91,8 +92,7 @@ exports.lazyInitHtmlTask = lazypipe()
         conf
       )
     }
-  )
-  .pipe(exports.lazyHtmlI18nTask);
+  );
 
 exports.stylelintTask = lazypipe().pipe(
   stylelint,
