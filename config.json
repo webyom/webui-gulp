@@ -4,7 +4,7 @@
     "local": {
       "domain": "{domain}",
       "cdnBase": "",
-      "apiBase": "http://local-api.kreditme.com:4081"
+      "apiBase": "//local-api.kreditme.com:4081"
     },
     "dev": {
       "domain": "{domain}",
