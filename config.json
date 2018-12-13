@@ -4,20 +4,20 @@
     "local": {
       "domain": "{domain}",
       "cdnBase": "",
-      "apiBase": "//local-api.danabersama.com:4081"
+      "apiBase": "http://local-api.kreditme.com:4081"
     },
     "dev": {
       "domain": "{domain}",
-      "cdnBase": "https://dev-cdn.danabersama.com",
-      "apiBase": "https://dev-api.danabersama.com",
+      "cdnBase": "https://dev-cdn.kreditme.com",
+      "apiBase": "https://dev-api.kreditme.com",
       "oss": {
         "bucket": "dev-web-static"
       }
     },
     "production": {
       "domain": "{domain}",
-      "cdnBase": "https://cdn.danabersama.com",
-      "apiBase": "https://api.danabersama.com",
+      "cdnBase": "https://cdn.kreditme.com",
+      "apiBase": "https://api.kreditme.com",
       "oss": {
         "bucket": "web-static"
       }
