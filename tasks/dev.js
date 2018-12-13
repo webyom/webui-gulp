@@ -49,23 +49,11 @@ gulp.task('serve', function (done) {
     wait: 1000, // Waits for all changes, before reloading. Defaults to 0 sec.
     https: conf.USE_HTTPS
       ? {
-        cert: fs.readFileSync(
-          path.resolve(__dirname, '../certs/kreditme.com.crt')
-        ),
-        key: fs.readFileSync(
-          path.resolve(__dirname, '../certs/kreditme.com.key')
-        )
+        cert: fs.readFileSync(path.join(process.cwd(), 'cert/server.crt')),
+        key: fs.readFileSync(path.join(process.cwd(), 'cert/server.key'))
       }
       : null
   };
   liveServer.start(params);
-  if (process.env.RUN_TEST == '1') {
-    new karma.Server({
-      configFile: process.cwd() + '/karma.conf.js',
-      singleRun: false,
-      reporters: ['mocha'],
-      preprocessors: null
-    }).start();
-  }
   done();
 });
