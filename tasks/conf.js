@@ -41,6 +41,7 @@ let conf;
 
 conf.CACHE_DIR_NAME = '.build-cache';
 conf.USE_CACHE = process.env.BUILD_CACHE != '0';
+conf.USE_HTTPS = process.env.USE_HTTPS == '1';
 conf.ESLINT_FIX = process.env.ESLINT_FIX == '1';
 conf.PROJECT_NAME = process
   .cwd()
