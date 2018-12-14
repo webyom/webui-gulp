@@ -49,6 +49,7 @@ gulp.task('watch', function () {
   gulp.watch(
     util.appendSrcExclusion([
       'src/' + conf.PROJECT_NAME + '/**/*.+(json|md)',
+      '!src/' + conf.PROJECT_NAME + '/**/README.md',
       '!src/' + conf.PROJECT_NAME + '/js/lang/**/*',
       '!src/' + conf.PROJECT_NAME + '/js/release-note/**/*'
     ]),

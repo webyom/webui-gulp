@@ -12,6 +12,7 @@ gulp.task('mt:others', function () {
     .src(
       util.appendSrcExclusion([
         'src/' + conf.PROJECT_NAME + '/**/*.+(json|md)',
+        '!src/' + conf.PROJECT_NAME + '/**/README.md',
         '!src/' + conf.PROJECT_NAME + '/js/lang/**/*',
         '!src/' + conf.PROJECT_NAME + '/js/release-note/**/*'
       ])
