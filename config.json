@@ -1,23 +1,23 @@
 {
-  "defaultLang": "en",
+  "defaultLang": "en_US",
   "envs": {
     "local": {
       "domain": "{domain}",
       "cdnBase": "",
-      "apiBase": "//local-api.kreditme.com:4081"
+      "apiBase": "//local-api.kreditme.id:4081"
     },
     "dev": {
       "domain": "{domain}",
-      "cdnBase": "https://dev-cdn.kreditme.com",
-      "apiBase": "https://dev-api.kreditme.com",
+      "cdnBase": "https://dev-cdn.kreditme.id",
+      "apiBase": "https://dev-api.kreditme.id",
       "oss": {
         "bucket": "dev-web-static"
       }
     },
     "production": {
       "domain": "{domain}",
-      "cdnBase": "https://cdn.kreditme.com",
-      "apiBase": "https://api.kreditme.com",
+      "cdnBase": "https://cdn.kreditme.id",
+      "apiBase": "https://api.kreditme.id",
       "oss": {
         "bucket": "web-static"
       }
