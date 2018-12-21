@@ -41,7 +41,7 @@ gulp.task(
 
 gulp.task('serve', function (done) {
   const params = {
-    port: process.env.DEV_PORT || 3007, // Set the server port. Defaults to 8080.
+    port: process.env.DEV_PORT || (conf.USE_HTTPS ? 443 : 80), // Set the server port. Defaults to 8080.
     host: '0.0.0.0', // Set the address to bind to. Defaults to 0.0.0.0.
     root: 'dist', // Set root directory that's being server. Defaults to cwd.
     open: true, // When false, it won't load your browser by default.
