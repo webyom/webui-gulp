@@ -44,7 +44,7 @@ gulp.task('eslint', function () {
       }
     });
   if (conf.ESLINT_FIX) {
-    stream = stream.pipe(gulp.dest('src/' + conf.PROJECT_NAME));
+    stream = stream.pipe(gulp.dest('src'));
   }
   return stream;
 });
