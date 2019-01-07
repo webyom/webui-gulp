@@ -28,7 +28,7 @@ exports.getDigest = function (content) {
 exports.isRelativeDependency = function (dep, isRelative, reqFilePath) {
   if (dep == './main') {
     return true;
-  } else if (/^\.\.|[{}]|\bmain$/.test(dep)) {
+  } else if (/[{}]|\bmain$/.test(dep)) {
     return false;
   } else {
     return isRelative;
