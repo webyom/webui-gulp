@@ -9,7 +9,7 @@
     "dev": {
       "domain": "{domain}",
       "cdnBase": "",
-      "apiBase": "//192.168.15.173:8081",
+      "apiBase": "//120.78.181.36:41001",
       "oss": {
         "bucket": "dev-web-static"
       }
