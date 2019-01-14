@@ -6,12 +6,17 @@
       "cdnBase": "",
       "apiBase": "//127.0.0.1:4081"
     },
-    "dev": {
+    "int": {
+      "domain": "{domain}",
+      "cdnBase": "",
+      "apiBase": "//120.78.181.36:41001"
+    },
+    "stg": {
       "domain": "{domain}",
       "cdnBase": "",
       "apiBase": "//120.78.181.36:41001",
       "oss": {
-        "bucket": "dev-web-static"
+        "bucket": "stg-web-static"
       }
     },
     "production": {

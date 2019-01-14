@@ -21,7 +21,7 @@ let conf;
   let defaultConf;
   const envs = defaultConfig.envs || defaultConfig;
   if (!envs[env]) {
-    env = 'dev';
+    env = 'local';
   }
   defaultConf = _.omit(Object.assign({}, defaultConfig, envs[env]), 'envs');
   conf = _.omit(
