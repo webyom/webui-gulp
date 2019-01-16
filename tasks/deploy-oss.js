@@ -24,7 +24,6 @@ gulp.task('deploy-oss', function (done) {
   let src = (failList.length > 0 && failList) || ['dist/**/*'];
   failList = [];
   let count = 0;
-  let ossKey = conf.getOssKey();
   gulp
     .src(src, {base: 'dist'})
     .pipe(
@@ -49,9 +48,9 @@ gulp.task('deploy-oss', function (done) {
           return;
         }
         let oss = new ALY.OSS({
-          accessKeyId: ossKey.id,
-          secretAccessKey: ossKey.secret,
-          endpoint: ossConfig.endpoint || 'http://oss-cn-beijing.aliyuncs.com',
+          accessKeyId: process.env.OSS_ACCESS_KEY_ID,
+          secretAccessKey: process.env.OSS_ACCESS_KEY_SECRET,
+          endpoint: ossConfig.endpoint || 'http://oss-cn-shenzhen.aliyuncs.com',
           apiVersion: '2013-10-15'
         });
         let headers = {

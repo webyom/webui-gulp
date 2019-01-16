@@ -56,25 +56,6 @@ conf.VERSION_DIGEST_LEN = 4;
 conf.IS_PRODUCTION = env == 'production';
 conf.IS_NG_PROJECT = !!config.ngProject;
 
-let ossKey = null;
-conf.getOssKey = function () {
-  if (ossKey) {
-    return ossKey;
-  }
-  const keyPath
-    = (conf.oss && conf.oss.keyPath) || '/usr/local/etc/lepin/oss-key';
-  if (!fs.existsSync(keyPath)) {
-    throw new Error('OSS key file "' + keyPath + '" does not exist!');
-  }
-  let content = fs.readFileSync(keyPath).toString();
-  let keys = content.split('\n')[0].split(' ');
-  ossKey = {
-    id: keys[0],
-    secret: keys[1]
-  };
-  return ossKey;
-};
-
 if (
   path.join(process.cwd(), 'node_modules/webui-gulp/tasks') != __dirname
   && path.resolve(
