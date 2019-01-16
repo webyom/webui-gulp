@@ -50,7 +50,9 @@ gulp.task('deploy-oss', function (done) {
         let oss = new ALY.OSS({
           accessKeyId: process.env.OSS_ACCESS_KEY_ID,
           secretAccessKey: process.env.OSS_ACCESS_KEY_SECRET,
-          endpoint: ossConfig.endpoint || 'http://oss-cn-shenzhen.aliyuncs.com',
+          endpoint:
+            ossConfig.endpoint
+            || 'http://oss-cn-shenzhen-internal.aliyuncs.com',
           apiVersion: '2013-10-15'
         });
         let headers = {
