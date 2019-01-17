@@ -43,7 +43,8 @@ gulp.task('deploy-oss', function (done) {
             path.relative(path.resolve('dist'), file.path)
           ) + '.oss';
         if (
-          fs.existsSync(cachePath)
+          conf.USE_CACHE
+          && fs.existsSync(cachePath)
           && fs.readFileSync(cachePath).toString() == digest
         ) {
           log(chalk.blue('cache'), ++count, uploadPath);
