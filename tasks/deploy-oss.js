@@ -21,7 +21,10 @@ gulp.task('deploy-oss', function (done) {
   if (!ossConfig.bucket) {
     throw new Error('deploy-oss: bucket undefined!');
   }
-  let src = (failList.length > 0 && failList) || ['dist/**/*'];
+  let src = (failList.length > 0 && failList) || [
+    'dist/' + conf.PROJECT_NAME + '/**/*',
+    '!dist/' + conf.PROJECT_NAME + '/**/*.html'
+  ];
   failList = [];
   let count = 0;
   gulp
