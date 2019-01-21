@@ -76,11 +76,12 @@ exports.lazyHtmlI18nTask = lazypipe().pipe(
 );
 
 exports.lazyInitHtmlTask = lazypipe()
+  .pipe(exports.lazyHtmlI18nTask)
+  .pipe(htmlI18n.restorePath)
   .pipe(
     htmlOptimizer,
-    {processRequire: false, cacheExtend: false}
+    {processRequire: 'render', cacheExtend: false}
   )
-  .pipe(exports.lazyHtmlI18nTask)
   .pipe(
     propertyMerge,
     {
@@ -92,7 +93,8 @@ exports.lazyInitHtmlTask = lazypipe()
         conf
       )
     }
-  );
+  )
+  .pipe(htmlI18n.i18nPath);
 
 exports.stylelintTask = lazypipe().pipe(
   stylelint,

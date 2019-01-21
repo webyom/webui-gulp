@@ -40,11 +40,19 @@ gulp.task('watch', function () {
     }
   );
 
-  gulp.watch(['src/**/*.layout.html', 'src/**/*.inc.html'], function (evt) {
-    let filePath = evt.path;
-    log(chalk.cyan('[changed]'), filePath);
-    return gulp.start('html');
-  });
+  gulp.watch(
+    [
+      'src/**/*.layout.html',
+      'src/**/*.inc.html',
+      'src/**/*.pr.tpl.html',
+      'src/**/*.pr.md'
+    ],
+    function (evt) {
+      let filePath = evt.path;
+      log(chalk.cyan('[changed]'), filePath);
+      return gulp.start('html');
+    }
+  );
 
   gulp.watch(
     util.appendSrcExclusion([
