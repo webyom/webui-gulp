@@ -66,35 +66,43 @@ exports.lazyPostcssTask = lazypipe().pipe(
   ]
 );
 
-exports.lazyHtmlI18nTask = lazypipe().pipe(
-  htmlI18n,
-  {
-    createLangDirs: true,
-    langDir: 'src/' + conf.PROJECT_NAME + '/js/lang',
-    defaultLang: conf.defaultLang
-  }
-);
-
-exports.lazyInitHtmlTask = lazypipe()
-  .pipe(exports.lazyHtmlI18nTask)
-  .pipe(htmlI18n.restorePath)
-  .pipe(
-    htmlOptimizer,
-    {processRequire: 'render', cacheExtend: false}
-  )
-  .pipe(
-    propertyMerge,
+exports.lazyHtmlI18nTask = function (runId) {
+  return lazypipe().pipe(
+    htmlI18n,
     {
-      properties: Object.assign(
-        {},
-        {
-          md5map: '{}'
-        },
-        conf
-      )
+      runId: runId,
+      createLangDirs: true,
+      langDir: 'src/' + conf.PROJECT_NAME + '/js/lang',
+      defaultLang: conf.defaultLang
     }
-  )
-  .pipe(htmlI18n.i18nPath);
+  );
+};
+
+exports.lazyInitHtmlTask = function () {
+  const runId = Math.random();
+
+  return lazypipe()
+    .pipe(exports.lazyHtmlI18nTask(runId))
+    .pipe(htmlI18n.restorePath)
+    .pipe(
+      htmlOptimizer,
+      {processRequire: 'render', cacheExtend: false}
+    )
+    .pipe(exports.lazyHtmlI18nTask(runId))
+    .pipe(
+      propertyMerge,
+      {
+        properties: Object.assign(
+          {},
+          {
+            md5map: '{}'
+          },
+          conf
+        )
+      }
+    )
+    .pipe(htmlI18n.i18nPath);
+};
 
 exports.stylelintTask = lazypipe().pipe(
   stylelint,

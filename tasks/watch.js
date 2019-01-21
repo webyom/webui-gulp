@@ -35,7 +35,7 @@ gulp.task('watch', function () {
       log(chalk.cyan('[changed]'), filePath);
       return gulp
         .src(filePath)
-        .pipe(lazyTasks.lazyInitHtmlTask())
+        .pipe(lazyTasks.lazyInitHtmlTask()())
         .pipe(gulp.dest('dist/' + part));
     }
   );

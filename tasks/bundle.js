@@ -99,7 +99,7 @@ gulp.task('bundle:html:init', function () {
 gulp.task('bundle:html:optimize', ['bundle:html:init'], function () {
   return gulp
     .src(['dist/**/*.html'])
-    .pipe(lazyTasks.lazyHtmlI18nTask())
+    .pipe(lazyTasks.lazyHtmlI18nTask()())
     .pipe(htmlI18n.restorePath())
     .pipe(
       propertyMerge({

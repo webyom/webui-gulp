@@ -80,7 +80,7 @@ gulp.task('html', function () {
       ]),
       {base: 'src'}
     )
-    .pipe(lazyTasks.lazyInitHtmlTask())
+    .pipe(lazyTasks.lazyInitHtmlTask()())
     .pipe(gulp.dest('dist'));
 });
 
