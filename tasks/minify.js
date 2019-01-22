@@ -6,6 +6,8 @@ const gulp = require('gulp'),
 
 // minify js, css, html
 gulp.task('minify', function () {
+  const doMinify = conf.IS_PRODUCTION && !process.env.NO_MINIFY;
+
   return gulp
     .src(
       [
@@ -16,10 +18,10 @@ gulp.task('minify', function () {
     )
     .pipe(
       gulpif(
-        conf.IS_PRODUCTION,
+        doMinify,
         cache('minify', 'dist', function () {
           return minify({
-            minify: conf.IS_PRODUCTION,
+            minify: doMinify,
             minifyHTML: {
               collapseWhitespace: true,
               conservativeCollapse: true

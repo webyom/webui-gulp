@@ -54,7 +54,6 @@ conf.IS_BASE_PROJECT = conf.PROJECT_NAME == conf.BASE_PROJECT_NAME;
 conf.ENV = env;
 conf.VERSION_DIGEST_LEN = 4;
 conf.IS_PRODUCTION = env == 'production';
-conf.IS_NG_PROJECT = !!config.ngProject;
 
 if (
   path.join(process.cwd(), 'node_modules/webui-gulp/tasks') != __dirname

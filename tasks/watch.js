@@ -144,8 +144,7 @@ gulp.task('watch', function () {
               isComponent,
               mt2amd({
                 cssModuleClassNameGenerator: util.cssModuleClassNameGenerator,
-                useExternalCssModuleHelper: !conf.IS_NG_PROJECT,
-                ngStyle: conf.IS_NG_PROJECT
+                useExternalCssModuleHelper: true
               })
             )
           )
@@ -190,8 +189,7 @@ gulp.task('watch', function () {
               isComponent,
               mt2amd({
                 cssModuleClassNameGenerator: util.cssModuleClassNameGenerator,
-                useExternalCssModuleHelper: !conf.IS_NG_PROJECT,
-                ngStyle: conf.IS_NG_PROJECT
+                useExternalCssModuleHelper: true
               })
             )
           )
