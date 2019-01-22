@@ -115,7 +115,8 @@ gulp.task('bundle:html:optimize', ['bundle:html:init'], function () {
     .pipe(
       htmlOptimizer({
         requireBaseDir: 'dist',
-        isRelativeDependency: util.isRelativeDependency
+        isRelativeDependency: util.isRelativeDependency,
+        babel: util.babel
       })
     )
     .pipe(

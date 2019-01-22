@@ -1,9 +1,7 @@
 const gulp = require('gulp'),
   conf = require('./conf'),
-  babel = require('gulp-babel'),
   mt2amd = require('gulp-mt2amd'),
   cache = require('./cache'),
-  through = require('through2'),
   util = require('./util');
 
 // convert json, md into AMD format
@@ -31,18 +29,7 @@ gulp.task('mt:tpl', function () {
       cache('mt', 'src', function () {
         return mt2amd({
           strictMode: true,
-          babel: function (file) {
-            return new Promise(function (resolve, reject) {
-              const babelStream = babel({sourceType: 'script'});
-              babelStream.pipe(
-                through.obj(function (file, enc, next) {
-                  resolve(file);
-                })
-              );
-              babelStream.on('error', reject);
-              babelStream.end(file);
-            });
-          }
+          babel: util.babel
         });
       })
     )

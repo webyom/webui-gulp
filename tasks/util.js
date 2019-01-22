@@ -3,6 +3,8 @@ const fs = require('fs'),
   crypto = require('crypto'),
   execFileSync = require('child_process').execFileSync,
   stripJsonComments = require('strip-json-comments'),
+  babel = require('gulp-babel'),
+  through = require('through2'),
   conf = require('./conf');
 
 function execGitCmd(args) {
@@ -74,4 +76,17 @@ exports.appendSrcExclusion = function (src) {
     }
   }
   return src.concat(exclusion);
+};
+
+exports.babel = function (file) {
+  return new Promise(function (resolve, reject) {
+    const babelStream = babel({sourceType: 'script'});
+    babelStream.pipe(
+      through.obj(function (file, enc, next) {
+        resolve(file);
+      })
+    );
+    babelStream.on('error', reject);
+    babelStream.end(file);
+  });
 };
