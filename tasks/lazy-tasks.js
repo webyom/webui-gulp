@@ -86,7 +86,12 @@ exports.lazyInitHtmlTask = function () {
     .pipe(htmlI18n.restorePath)
     .pipe(
       htmlOptimizer,
-      {processRequire: 'render', cacheExtend: false, babel: util.babel}
+      {
+        processRequire: 'render',
+        cacheExtend: false,
+        strictModeTemplate: true,
+        babel: util.babel
+      }
     )
     .pipe(exports.lazyHtmlI18nTask(runId))
     .pipe(
