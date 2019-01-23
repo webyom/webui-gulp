@@ -43,12 +43,15 @@ conf.CACHE_DIR_NAME = '.build-cache';
 conf.USE_CACHE = process.env.BUILD_CACHE != '0';
 conf.USE_HTTPS = process.env.USE_HTTPS == '1';
 conf.ESLINT_FIX = process.env.ESLINT_FIX == '1';
-conf.PROJECT_NAME = process
-  .cwd()
-  .split(path.sep)
-  .pop();
+conf.PROJECT_NAME
+  = process.env.PROJECT_NAME
+  || process
+    .cwd()
+    .split(path.sep)
+    .pop();
 conf.BASE_PROJECT_NAME
-  = config.baseProjectName
+  = process.env.BASE_PROJECT_NAME
+  || config.baseProjectName
   || (conf.PROJECT_NAME.indexOf('webui-m-') === 0 ? 'webui-m-base' : 'webui-base');
 conf.IS_BASE_PROJECT = conf.PROJECT_NAME == conf.BASE_PROJECT_NAME;
 conf.ENV = env;
