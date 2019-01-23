@@ -1,5 +1,5 @@
 {
-  "defaultLang": "en_US",
+  "defaultLang": "en-US",
   "envs": {
     "local": {
       "domain": "{domain}",
@@ -13,18 +13,20 @@
     },
     "stg": {
       "domain": "{domain}",
-      "cdnBase": "",
-      "apiBase": "//120.78.181.36:41001",
+      "cdnBase": "//statics-test.seanla.top",
+      "apiBase": "//mgt-api-test.seanla.top",
       "oss": {
-        "bucket": "stg-web-static"
+        "bucket": "public-statics-dev",
+        "endpoint": "http://oss-cn-shenzhen-internal.aliyuncs.com"
       }
     },
     "production": {
       "domain": "{domain}",
-      "cdnBase": "https://cdn.kreditme.id",
-      "apiBase": "https://api.kreditme.id",
+      "cdnBase": "//statics.kreditme.id",
+      "apiBase": "//mgt-api.kreditme.id",
       "oss": {
-        "bucket": "web-static"
+        "bucket": "public-statics-djakarta",
+        "endpoint": "http://oss-ap-southeast-5-internal.aliyuncs.com"
       }
     }
   }
