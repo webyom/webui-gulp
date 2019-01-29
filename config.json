@@ -11,7 +11,7 @@
       "cdnBase": "",
       "apiBase": "//120.78.181.36:41001"
     },
-    "stg": {
+    "qa": {
       "domain": "{domain}",
       "cdnBase": "//statics-test.seanla.top",
       "apiBase": "//mgt-api-test.seanla.top",
