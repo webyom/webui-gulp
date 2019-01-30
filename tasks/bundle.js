@@ -91,7 +91,7 @@ gulp.task('bundle:html:init', function () {
       ]),
       {base: 'src'}
     )
-    .pipe(htmlOptimizer({processRequire: false}))
+    .pipe(htmlOptimizer({optimizeRequire: false}))
     .pipe(gulp.dest('dist'));
 });
 

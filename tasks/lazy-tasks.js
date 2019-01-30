@@ -87,7 +87,7 @@ exports.lazyInitHtmlTask = function () {
     .pipe(
       htmlOptimizer,
       {
-        processRequire: 'render',
+        optimizeRequire: false,
         cacheExtend: false,
         strictModeTemplate: true,
         babel: util.babel
