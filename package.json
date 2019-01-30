@@ -1,6 +1,6 @@
 {
   "name": "webui-gulp",
-  "version": "0.58.0",
+  "version": "0.59.0",
   "private": true,
   "description": "webui-gulp",
   "scripts": {},
@@ -16,7 +16,7 @@
     "gulp-envify": "^1.0.0",
     "gulp-eslint": "^4.0.2",
     "gulp-html-i18n": "^0.15.0",
-    "gulp-html-optimizer": "^1.32.0",
+    "gulp-html-optimizer": "^1.33.0",
     "gulp-if": "^2.0.0",
     "gulp-less": "^4.0.1",
     "gulp-lesshint": "^1.1.0",

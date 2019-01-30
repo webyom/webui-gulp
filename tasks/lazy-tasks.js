@@ -88,7 +88,7 @@ exports.lazyInitHtmlTask = function () {
       htmlOptimizer,
       {
         requireBaseDir: 'dist',
-        optimizeRequire: false,
+        optimizeRequire: 'ifAlways',
         cacheExtend: false,
         strictModeTemplate: true,
         babel: util.babel
