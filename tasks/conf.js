@@ -60,6 +60,37 @@ conf.ENV = env;
 conf.VERSION_DIGEST_LEN = 4;
 conf.IS_PRODUCTION = env == 'production';
 
+let ossAccessKey = null;
+conf.getOssAccessKey = function () {
+  if (ossAccessKey) {
+    return ossAccessKey;
+  }
+  const id = process.env.OSS_ACCESS_KEY_ID;
+  const secret = process.env.OSS_ACCESS_KEY_SECRET;
+  if (id && secret) {
+    ossAccessKey = {
+      id: id,
+      secret: secret
+    };
+  } else {
+    const accessKeyPath
+      = (conf.oss && conf.oss.accessKeyPath)
+      || '/usr/local/etc/lepin/oss-access-key';
+    if (!fs.existsSync(accessKeyPath)) {
+      throw new Error(
+        'OSS access key file "' + accessKeyPath + '" does not exist!'
+      );
+    }
+    const content = fs.readFileSync(accessKeyPath).toString();
+    const keys = content.split('\n')[0].split(' ');
+    ossAccessKey = {
+      id: keys[0],
+      secret: keys[1]
+    };
+  }
+  return ossAccessKey;
+};
+
 if (
   path.join(process.cwd(), 'node_modules/webui-gulp/tasks') != __dirname
   && path.resolve(
