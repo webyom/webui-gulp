@@ -13,10 +13,11 @@ const fs = require('fs'),
 
 mime.default_type = 'text/plain';
 
-const ossConfig = conf.oss || {};
+const defaultOssConfig = conf.oss || {};
 
-function deployOss(oSrc, done) {
+function deployOss(opt, done) {
   const ossAccessKey = conf.getOssAccessKey();
+  const ossConfig = opt.ossConfig || defaultOssConfig;
   if (!ossAccessKey.id || !ossAccessKey.secret) {
     throw new Error(
       'deploy-oss: ossAccessKeyId or ossAccessKeySecret undefined!'
@@ -31,7 +32,7 @@ function deployOss(oSrc, done) {
   let failList = [];
   let retryTimes = 0;
   (function deploy() {
-    const src = (failList.length > 0 && failList) || oSrc;
+    const src = (failList.length > 0 && failList) || opt.src;
     failList = [];
     let count = 0;
     gulp
@@ -118,10 +119,12 @@ function deployOss(oSrc, done) {
 
 gulp.task('deploy-oss', function (done) {
   deployOss(
-    [
-      'dist/' + conf.PROJECT_NAME + '/**/*',
-      '!dist/' + conf.PROJECT_NAME + '/**/*.html'
-    ],
+    {
+      src: [
+        'dist/' + conf.PROJECT_NAME + '/**/*',
+        '!dist/' + conf.PROJECT_NAME + '/**/*.html'
+      ]
+    },
     done
   );
 });
