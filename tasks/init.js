@@ -68,7 +68,7 @@ gulp.task('ts', function () {
 });
 
 // move html
-gulp.task('html', function () {
+gulp.task('html', ['babel', 'ts'], function () {
   return gulp
     .src(
       util.appendSrcExclusion([

@@ -43,7 +43,7 @@ gulp.task('watch', function () {
   gulp.watch(
     [
       'src/**/*.layout.html',
-      'src/**/*.inc.html',
+      'src/**/*.inc.+(html|js|css)',
       'src/**/*.pr.tpl.html',
       'src/**/*.pr.md'
     ],

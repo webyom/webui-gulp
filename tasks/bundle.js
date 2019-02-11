@@ -14,6 +14,7 @@ const fs = require('fs'),
   propertyMerge = require('gulp-property-merge');
 
 const md5map = {};
+const doMinify = conf.IS_PRODUCTION && !process.env.NO_MINIFY;
 
 // bundle
 gulp.task('bundle', ['bundle:amd', 'bundle:html']);
@@ -91,7 +92,14 @@ gulp.task('bundle:html:init', function () {
       ]),
       {base: 'src'}
     )
-    .pipe(htmlOptimizer({optimizeRequire: false}))
+    .pipe(
+      htmlOptimizer({
+        baseDir: 'dist',
+        minifyJS: doMinify,
+        minifyCSS: doMinify,
+        optimizeRequire: false
+      })
+    )
     .pipe(gulp.dest('dist'));
 });
 
@@ -114,7 +122,9 @@ gulp.task('bundle:html:optimize', ['bundle:html:init'], function () {
     )
     .pipe(
       htmlOptimizer({
-        requireBaseDir: 'dist',
+        baseDir: 'dist',
+        minifyJS: doMinify,
+        minifyCSS: doMinify,
         strictModeTemplate: true,
         isRelativeDependency: util.isRelativeDependency,
         babel: util.babel
@@ -152,7 +162,7 @@ gulp.task(
           properties: Object.assign(
             {},
             {
-              md5map: JSON.stringify(md5map)
+              md5map: JSON.stringify(md5map).replace(/"/g, '\\"')
             },
             conf
           )
