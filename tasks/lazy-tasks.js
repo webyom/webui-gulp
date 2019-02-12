@@ -82,6 +82,12 @@ exports.lazyInitHtmlTask = function () {
   const runId = Math.random();
 
   return lazypipe()
+    .pipe(
+      propertyMerge,
+      {
+        properties: Object.assign({}, conf)
+      }
+    )
     .pipe(exports.lazyHtmlI18nTask(runId))
     .pipe(htmlI18n.restorePath)
     .pipe(
@@ -99,7 +105,6 @@ exports.lazyInitHtmlTask = function () {
       propertyMerge,
       {
         properties: Object.assign(
-          {},
           {
             md5map: '{}'
           },
