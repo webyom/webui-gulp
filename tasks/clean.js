@@ -2,8 +2,12 @@ const gulp = require('gulp'),
   conf = require('./conf'),
   del = require('del');
 
-gulp.task('clean', function () {
+gulp.task('clean', ['clean-custom'], function () {
   return del(['dist/']);
+});
+
+gulp.task('clean-custom', function () {
+  return del(['src/' + conf.PROJECT_NAME + '/**/_custom/']);
 });
 
 gulp.task('clean-cache', function () {
