@@ -31,7 +31,7 @@
     }
   },
   "brands": {
-    "SatuKredit": {
+    "KreditMe": {
       "envs": {
         "int": {
           "domain": "{domain}",
