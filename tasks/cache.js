@@ -8,7 +8,11 @@ const fs = require('fs'),
   util = require('./util'),
   through = require('through2');
 
-const DEFAULT_CACHE_BASE = path.resolve(conf.CACHE_DIR_NAME, conf.ENV);
+const DEFAULT_CACHE_BASE = path.resolve(
+  conf.CACHE_DIR_NAME,
+  conf.BRAND_NAME,
+  conf.ENV
+);
 
 function replaceExtName(filePath, extName) {
   let ext = path.extname(filePath).toLowerCase();
