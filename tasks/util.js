@@ -70,7 +70,12 @@ exports.appendSrcExclusion = function (src) {
   }
   const exclusion = ['!dist/**/_vendor/**/*'];
   if (src[0].split('/')[0] != 'dist') {
-    exclusion.push('!src/**/_vendor/**/*', '!src/app/**/*', '!src/base/**/*');
+    exclusion.push(
+      '!src/**/_vendor/**/*',
+      '!src/app/**/*',
+      '!src/base/**/*',
+      '!src/brand/**/*'
+    );
     if (!conf.IS_BASE_PROJECT) {
       exclusion.push('!src/' + conf.BASE_PROJECT_NAME + '/**/*');
     }
