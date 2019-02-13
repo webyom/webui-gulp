@@ -5,9 +5,14 @@ const _ = require('underscore'),
   path = require('path'),
   log = require('fancy-log'),
   chalk = require('chalk');
-
-const BRAND_NAME = process.env.BRAND_NAME || 'KreditMe';
 const DEFAULT_CONFIG = require('../config');
+
+const ENV = DEFAULT_CONFIG.envs[process.env.NODE_ENV]
+  ? process.env.NODE_ENV
+  : 'local';
+const BRAND_NAME = DEFAULT_CONFIG.brands[process.env.BRAND_NAME]
+  ? process.env.BRAND_NAME
+  : 'KreditMe';
 
 let config;
 try {
@@ -16,17 +21,11 @@ try {
   config = {};
 }
 
-const env = DEFAULT_CONFIG.envs[process.env.NODE_ENV]
-  ? process.env.NODE_ENV
-  : 'local';
-
-log('Running env ' + chalk.green(env));
-
 const conf = (function () {
   const defaultConf = Object.assign(
     {},
     DEFAULT_CONFIG,
-    DEFAULT_CONFIG.envs[env]
+    DEFAULT_CONFIG.envs[ENV]
   );
   const defaultBrandConf = getBrandConfig(DEFAULT_CONFIG);
   const brandConf = getBrandConfig(config);
@@ -35,11 +34,11 @@ const conf = (function () {
       {},
       defaultConf,
       config,
-      config.envs && config.envs[env],
+      config.envs && config.envs[ENV],
       defaultBrandConf,
       brandConf
     ),
-    'envs'
+    ['envs', 'brands']
   );
 
   // overwrite config from command line
@@ -54,7 +53,7 @@ const conf = (function () {
     if (!conf) {
       return {};
     }
-    return Object.assign({}, conf, conf.envs && conf.envs[env]);
+    return Object.assign({}, conf, conf.envs && conf.envs[ENV]);
   }
 
   return conf;
@@ -78,9 +77,9 @@ conf.BASE_PROJECT_NAME
   || config.baseProjectName
   || (conf.PROJECT_NAME.indexOf('webui-m-') === 0 ? 'webui-m-base' : 'webui-base');
 conf.IS_BASE_PROJECT = conf.PROJECT_NAME == conf.BASE_PROJECT_NAME;
-conf.ENV = env;
+conf.ENV = ENV;
 conf.VERSION_DIGEST_LEN = 4;
-conf.IS_PRODUCTION = env == 'production';
+conf.IS_PRODUCTION = ENV == 'production';
 
 let ossAccessKey = null;
 conf.getOssAccessKey = function () {
@@ -123,5 +122,14 @@ if (
   log(chalk.red('Please run gulp in the project root dir.'));
   process.exit(1);
 }
+
+log(
+  'Running env '
+    + chalk.green(ENV)
+    + ' with brand '
+    + chalk.green(BRAND_NAME)
+    + ' and config '
+    + chalk.gray(JSON.stringify(conf, null, 2))
+);
 
 module.exports = conf;
