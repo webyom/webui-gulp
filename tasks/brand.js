@@ -3,7 +3,7 @@ const gulp = require('gulp'),
 
 gulp.task('brand-custom', ['clean-custom'], function () {
   if (!conf.BRAND_NAME) {
-    throw new Error('brand-custom: BRAND_NAME must be provided!');
+    throw new Error('BRAND_NAME must be provided!');
   }
   return gulp
     .src(['src/brand/' + conf.BRAND_NAME + '/**/_custom/**/*'], {

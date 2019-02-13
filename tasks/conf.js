@@ -5,7 +5,9 @@ const _ = require('underscore'),
   path = require('path'),
   log = require('fancy-log'),
   chalk = require('chalk');
-const defaultConfig = require('../config');
+
+const BRAND_NAME = process.env.BRAND_NAME || 'KreditMe';
+const DEFAULT_CONFIG = require('../config');
 
 let config;
 try {
@@ -14,22 +16,31 @@ try {
   config = {};
 }
 
-let env = process.env.NODE_ENV;
-let conf;
+const env = DEFAULT_CONFIG.envs[process.env.NODE_ENV]
+  ? process.env.NODE_ENV
+  : 'local';
 
-(function () {
-  let defaultConf;
-  const envs = defaultConfig.envs || defaultConfig;
-  if (!envs[env]) {
-    env = 'local';
-  }
-  defaultConf = _.omit(Object.assign({}, defaultConfig, envs[env]), 'envs');
-  conf = _.omit(
-    Object.assign({}, defaultConf, config, (config.envs || config)[env]),
+log('Running env ' + chalk.green(env));
+
+const conf = (function () {
+  const defaultConf = Object.assign(
+    {},
+    DEFAULT_CONFIG,
+    DEFAULT_CONFIG.envs[env]
+  );
+  const defaultBrandConf = getBrandConfig(DEFAULT_CONFIG);
+  const brandConf = getBrandConfig(config);
+  const conf = _.omit(
+    Object.assign(
+      {},
+      defaultConf,
+      config,
+      config.envs && config.envs[env],
+      defaultBrandConf,
+      brandConf
+    ),
     'envs'
   );
-
-  log('Running env ' + chalk.green(env));
 
   // overwrite config from command line
   for (const p in conf) {
@@ -37,6 +48,16 @@ let conf;
       conf[p] = process.env[p];
     }
   }
+
+  function getBrandConfig(config) {
+    const conf = config.brands && config.brands[BRAND_NAME];
+    if (!conf) {
+      return {};
+    }
+    return Object.assign({}, conf, conf.envs && conf.envs[env]);
+  }
+
+  return conf;
 })();
 
 conf.BUILD_TIME = new Date().toISOString();
@@ -44,7 +65,7 @@ conf.CACHE_DIR_NAME = '.build-cache';
 conf.USE_CACHE = process.env.BUILD_CACHE != '0';
 conf.USE_HTTPS = process.env.USE_HTTPS == '1';
 conf.ESLINT_FIX = process.env.ESLINT_FIX == '1';
-conf.BRAND_NAME = process.env.BRAND_NAME || 'SatuKredit';
+conf.BRAND_NAME = BRAND_NAME;
 conf.PROJECT_VERSION = process.env.PROJECT_VERSION || '';
 conf.PROJECT_NAME
   = process.env.PROJECT_NAME

@@ -29,5 +29,34 @@
         "endpoint": "http://oss-ap-southeast-5-internal.aliyuncs.com"
       }
     }
+  },
+  "brands": {
+    "SatuKredit": {
+      "envs": {
+        "int": {
+          "domain": "{domain}",
+          "cdnBase": "",
+          "apiBase": "//120.78.181.36:41001"
+        },
+        "qa": {
+          "domain": "{domain}",
+          "cdnBase": "//statics-test.seanla.top",
+          "apiBase": "//mgt-api-test.seanla.top",
+          "oss": {
+            "bucket": "public-statics-dev",
+            "endpoint": "http://oss-cn-shenzhen-internal.aliyuncs.com"
+          }
+        },
+        "production": {
+          "domain": "{domain}",
+          "cdnBase": "//statics.kreditme.id",
+          "apiBase": "//mgt-api.kreditme.id",
+          "oss": {
+            "bucket": "public-statics-djakarta",
+            "endpoint": "http://oss-ap-southeast-5-internal.aliyuncs.com"
+          }
+        }
+      }
+    }
   }
 }
