@@ -1,5 +1,6 @@
 const gulp = require('gulp'),
   conf = require('./conf'),
+  lazyTasks = require('./lazy-tasks'),
   htmlI18n = require('gulp-html-i18n'),
   mt2amd = require('gulp-mt2amd');
 
@@ -21,6 +22,7 @@ gulp.task('i18n:resolve-reference', ['i18n:validate'], function () {
         langDir: 'src/' + conf.PROJECT_NAME + '/js/lang'
       })
     )
+    .pipe(lazyTasks.propertyMergeTask())
     .pipe(mt2amd())
     .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/js/lang'));
 });
