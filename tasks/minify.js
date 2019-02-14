@@ -25,7 +25,7 @@ gulp.task('minify', function () {
             minify: doMinify,
             minifyHTML: {
               collapseWhitespace: true,
-              conservativeCollapse: true
+              conservativeCollapse: false
             },
             minifyJS: {
               sourceMap: true
