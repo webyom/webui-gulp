@@ -12,9 +12,8 @@ gulp.task('minify', function () {
     .src(
       [
         'dist/**/*.+(js|css|html)',
-        '!dist/**/*.min.+(js|css)',
-        '!dist/' + conf.BASE_PROJECT_NAME + '/**/*'
-      ],
+        '!dist/**/*.min.+(js|css)'
+      ].concat(conf.IS_BASE_PROJECT ? [] : ['!dist/' + conf.BASE_PROJECT_NAME + '/**/*']),
       {base: 'dist'}
     )
     .pipe(
