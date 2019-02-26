@@ -43,7 +43,7 @@
           "cdnBase": "//statics-test.seanla.top",
           "apiBase": "//mgt-api-test.seanla.top",
           "oss": {
-            "bucket": "public-statics-dev",
+            "bucket": "public-statics-kreditme-dev",
             "endpoint": "http://oss-cn-shenzhen-internal.aliyuncs.com"
           }
         },
@@ -52,7 +52,7 @@
           "cdnBase": "//statics.kreditme.id",
           "apiBase": "//mgt-api.kreditme.id",
           "oss": {
-            "bucket": "public-statics-djakarta",
+            "bucket": "public-statics-kreditme-djakarta",
             "endpoint": "http://oss-ap-southeast-5-internal.aliyuncs.com"
           }
         }
