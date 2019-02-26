@@ -12,7 +12,7 @@ const ENV = DEFAULT_CONFIG.envs[process.env.NODE_ENV]
   : 'local';
 const BRAND_NAME = DEFAULT_CONFIG.brands[process.env.BRAND_NAME]
   ? process.env.BRAND_NAME
-  : 'SatuKredit';
+  : 'Kredito';
 
 let config;
 try {
