@@ -49,8 +49,8 @@
         },
         "production": {
           "domain": "{domain}",
-          "cdnBase": "//statics.kreditme.id",
-          "apiBase": "//mgt-api.kreditme.id",
+          "cdnBase": "//resources.kreditme.id",
+          "apiBase": "//bapi.kreditme.id",
           "oss": {
             "bucket": "public-statics-kreditme-djakarta",
             "endpoint": "http://oss-ap-southeast-5-internal.aliyuncs.com"
