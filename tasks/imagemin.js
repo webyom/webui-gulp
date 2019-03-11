@@ -1,11 +1,15 @@
 const gulp = require('gulp'),
+  through = require('through2'),
   imagemin = require('gulp-imagemin'),
   imageminWebp = require('imagemin-webp'),
   imageminPngquant = require('imagemin-pngquant'),
   imageminMozjpeg = require('imagemin-mozjpeg'),
   conf = require('./conf');
 
-gulp.task('imagemin:webp', function () {
+gulp.task('imagemin:webp', function (done) {
+  if (!process.env.GEN_WEBP) {
+    return done();
+  }
   gulp
     .src([
       'dist/' + conf.PROJECT_NAME + '/**/*.+(jpg|jpeg|png)',
@@ -18,7 +22,17 @@ gulp.task('imagemin:webp', function () {
         })
       ])
     )
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
+    .pipe(
+      through.obj(function (file, enc, next) {
+        file.path = file.path.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+        this.push(file);
+        next();
+      })
+    )
+    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME))
+    .on('finish', function () {
+      done();
+    });
 });
 
 gulp.task('imagemin:png', ['imagemin:webp'], function () {
@@ -48,7 +62,7 @@ gulp.task('imagemin:jpg', ['imagemin:webp'], function (done) {
     .pipe(
       imagemin([
         imageminMozjpeg({
-          quality: 70
+          quality: 75
         })
       ])
     )
