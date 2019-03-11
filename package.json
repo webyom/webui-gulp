@@ -1,6 +1,6 @@
 {
   "name": "webui-gulp",
-  "version": "0.85.0",
+  "version": "0.86.0",
   "private": true,
   "description": "webui-gulp",
   "scripts": {},
@@ -18,7 +18,6 @@
     "gulp-html-i18n": "^0.15.0",
     "gulp-html-optimizer": "^1.41.0",
     "gulp-if": "^2.0.0",
-    "gulp-imagemin": "^5.0.3",
     "gulp-less": "^4.0.1",
     "gulp-lesshint": "^1.1.0",
     "gulp-minifier": "^1.2.2",
@@ -30,6 +29,7 @@
     "gulp-stylelint": "^8.0.0",
     "gulp-typescript": "^5.0.0-alpha.3",
     "gulp-useref": "^3.0.4",
+    "imagemin": "^6.1.0",
     "imagemin-mozjpeg": "^8.0.0",
     "imagemin-pngquant": "^7.0.0",
     "imagemin-webp": "^5.0.0",
