@@ -179,11 +179,11 @@ gulp.task('sass:component', ['stylelint'], function (done) {
 gulp.task('img', function () {
   return gulp
     .src(
-      util.appendSrcExclusion([
+      [
         'src/'
           + conf.PROJECT_NAME
           + '/**/*.+(jpg|jpeg|gif|png|otf|eot|svg|ttf|woff|woff2|ico|mp3|swf)'
-      ]),
+      ],
       {base: 'src'}
     )
     .pipe(gulp.dest('dist'));
