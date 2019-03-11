@@ -1,6 +1,6 @@
 {
   "name": "webui-gulp",
-  "version": "0.83.0",
+  "version": "0.84.0",
   "private": true,
   "description": "webui-gulp",
   "scripts": {},
@@ -31,7 +31,7 @@
     "gulp-typescript": "^5.0.0-alpha.3",
     "gulp-useref": "^3.0.4",
     "imagemin-mozjpeg": "^8.0.0",
-    "imagemin-optipng": "^6.0.0",
+    "imagemin-pngquant": "^7.0.0",
     "imagemin-webp": "^5.0.0",
     "karma": "^2.0.0",
     "lazypipe": "^1.0.1",

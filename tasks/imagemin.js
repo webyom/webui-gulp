@@ -31,7 +31,7 @@ gulp.task('imagemin:png', ['imagemin:webp'], function () {
     .pipe(
       imagemin([
         imageminPngquant({
-          quality: '65-80'
+          quality: [0.65, 0.8]
         })
       ])
     )
