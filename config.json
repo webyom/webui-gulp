@@ -33,20 +33,6 @@
   "brands": {
     "KreditMe": {
       "envs": {
-        "int": {
-          "domain": "{domain}",
-          "cdnBase": "",
-          "apiBase": "//120.78.181.36:41001"
-        },
-        "qa": {
-          "domain": "{domain}",
-          "cdnBase": "//statics-test.seanla.top",
-          "apiBase": "//mgt-api-test.seanla.top",
-          "oss": {
-            "bucket": "public-statics-kreditme-dev",
-            "endpoint": "http://oss-cn-shenzhen-internal.aliyuncs.com"
-          }
-        },
         "production": {
           "domain": "{domain}",
           "cdnBase": "//resources.kreditme.id",
