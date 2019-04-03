@@ -16,7 +16,7 @@ const BRAND_NAME = DEFAULT_CONFIG.brands[process.env.BRAND_NAME]
 
 let config;
 try {
-  config = require('../../../config');
+  config = require(path.resolve('./config'));
 } catch (e) {
   config = {};
 }
