@@ -5,6 +5,7 @@ const fs = require('fs'),
   stripJsonComments = require('strip-json-comments'),
   babel = require('gulp-babel'),
   through = require('through2'),
+  marked = require('marked'),
   conf = require('./conf');
 
 function execGitCmd(args) {
@@ -93,5 +94,18 @@ exports.babel = function (file) {
     );
     babelStream.on('error', reject);
     babelStream.end(file);
+  });
+};
+
+exports.markedStream = function ({minify = false} = {}) {
+  return through.obj(function (file, enc, next) {
+    let contents = marked(file.contents.toString());
+    if (minify) {
+      contents = contents.replace(/\n/g, '').replace(/ +/g, ' ');
+    }
+    file.contents = new Buffer(contents);
+    file.path = file.path.replace(/\.md$/i, '.html');
+    this.push(file);
+    next();
   });
 };
