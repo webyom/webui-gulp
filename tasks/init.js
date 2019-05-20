@@ -86,15 +86,24 @@ gulp.task('html', ['babel', 'ts'], function () {
 
 // stylelint
 gulp.task('stylelint', function () {
-  return gulp
+  let stream = gulp
     .src(
       util.appendSrcExclusion([
         'src/' + conf.PROJECT_NAME + '/**/*.+(less|scss)'
-      ])
+      ]),
+      {base: 'src'}
     )
     .pipe(
-      cache('stylelint', 'src', lazyTasks.stylelintTask, {writeCache: false})
+      conf.STYLELINT_FIX
+        ? lazyTasks.stylelintTask()
+        : cache('stylelint', 'src', lazyTasks.stylelintTask, {
+          writeCache: false
+        })
     );
+  if (conf.STYLELINT_FIX) {
+    stream = stream.pipe(gulp.dest('src'));
+  }
+  return stream;
 });
 
 // compile less

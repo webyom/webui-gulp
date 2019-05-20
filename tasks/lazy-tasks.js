@@ -118,6 +118,8 @@ exports.lazyInitHtmlTask = function () {
 exports.stylelintTask = lazypipe().pipe(
   stylelint,
   {
+    fix: conf.STYLELINT_FIX,
+    failAfterError: false,
     reporters: [{formatter: 'string', console: true}]
   }
 );
