@@ -53,10 +53,14 @@ gulp.task('eslint', function () {
 gulp.task('babel', ['eslint'], function () {
   return gulp
     .src(
-      util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.+(js|jsx)'])
+      util.appendSrcExclusion([
+        'src/' + conf.PROJECT_NAME + '/**/*.+(js|jsx)',
+        'src/sw.js'
+      ]),
+      {base: 'src'}
     )
     .pipe(cache('babel', 'src', lazyTasks.babelTask))
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
+    .pipe(gulp.dest('dist'));
 });
 
 // ts

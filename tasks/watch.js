@@ -30,8 +30,8 @@ gulp.task('watch', function () {
       '!src/**/*.tpl.html'
     ]),
     function (evt) {
-      let filePath = evt.path;
-      let part = (path.dirname(filePath) + '/').split('/src/').pop();
+      const filePath = evt.path;
+      const part = (path.dirname(filePath) + '/').split('/src/').pop();
       log(chalk.cyan('[changed]'), filePath);
       return gulp
         .src(filePath)
@@ -48,7 +48,7 @@ gulp.task('watch', function () {
       'src/**/*.pr.md'
     ],
     function (evt) {
-      let filePath = evt.path;
+      const filePath = evt.path;
       log(chalk.cyan('[changed]'), filePath);
       return gulp.start('html');
     }
@@ -62,8 +62,8 @@ gulp.task('watch', function () {
       '!src/' + conf.PROJECT_NAME + '/js/release-note/**/*'
     ]),
     function (evt) {
-      let filePath = evt.path;
-      let part = (path.dirname(filePath) + '/')
+      const filePath = evt.path;
+      const part = (path.dirname(filePath) + '/')
         .split('/src/' + conf.PROJECT_NAME + '/')
         .pop();
       log(chalk.cyan('[changed]'), filePath);
@@ -74,11 +74,22 @@ gulp.task('watch', function () {
     }
   );
 
+  gulp.watch('src/sw.js', function (evt) {
+    const filePath = evt.path;
+    log(chalk.cyan('[changed]'), filePath);
+    return gulp
+      .src(filePath)
+      .pipe(eslint())
+      .pipe(eslint.format())
+      .pipe(lazyTasks.babelTask())
+      .pipe(gulp.dest('dist'));
+  });
+
   gulp.watch(
     util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.+(js|jsx)']),
     function (evt) {
-      let filePath = evt.path;
-      let part = (path.dirname(filePath) + '/')
+      const filePath = evt.path;
+      const part = (path.dirname(filePath) + '/')
         .split('/src/' + conf.PROJECT_NAME + '/')
         .pop();
       log(chalk.cyan('[changed]'), filePath);
@@ -94,8 +105,8 @@ gulp.task('watch', function () {
   gulp.watch(
     util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.ts']),
     function (evt) {
-      let filePath = evt.path;
-      let part = (path.dirname(filePath) + '/')
+      const filePath = evt.path;
+      const part = (path.dirname(filePath) + '/')
         .split('/src/' + conf.PROJECT_NAME + '/')
         .pop();
       log(chalk.cyan('[changed]'), filePath);
@@ -112,7 +123,7 @@ gulp.task('watch', function () {
       '!dist/' + conf.PROJECT_NAME + '/js/template/message/**/main.js'
     ],
     function (evt) {
-      let filePath = evt.path;
+      const filePath = evt.path;
       log(chalk.cyan('[changed]'), filePath);
       return gulp.start('bundle-message-template');
     }
@@ -121,11 +132,11 @@ gulp.task('watch', function () {
   gulp.watch(
     util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.less']),
     function (evt) {
-      let filePath = evt.path;
-      let part = (path.dirname(filePath) + '/')
+      const filePath = evt.path;
+      const part = (path.dirname(filePath) + '/')
         .split('/src/' + conf.PROJECT_NAME + '/')
         .pop();
-      let isComponent = (/(^|-)style\.less$/).test(path.basename(filePath));
+      const isComponent = (/(^|-)style\.less$/).test(path.basename(filePath));
       log(chalk.cyan('[changed]'), filePath);
       if (/(^|-)main\.less$/.test(path.basename(filePath)) || isComponent) {
         return gulp
@@ -166,11 +177,11 @@ gulp.task('watch', function () {
   gulp.watch(
     util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.scss']),
     function (evt) {
-      let filePath = evt.path;
-      let part = (path.dirname(filePath) + '/')
+      const filePath = evt.path;
+      const part = (path.dirname(filePath) + '/')
         .split('/src/' + conf.PROJECT_NAME + '/')
         .pop();
-      let isComponent = (/(^|-)style\.scss$/).test(path.basename(filePath));
+      const isComponent = (/(^|-)style\.scss$/).test(path.basename(filePath));
       log(chalk.cyan('[changed]'), filePath);
       if (/(^|-)main\.scss$/.test(path.basename(filePath)) || isComponent) {
         return gulp
@@ -209,13 +220,13 @@ gulp.task('watch', function () {
   );
 
   gulp.watch(['src/' + conf.PROJECT_NAME + '/**/*.tpl.html'], function (evt) {
-    let filePath = evt.path;
+    const filePath = evt.path;
     log(chalk.cyan('[changed]'), filePath);
     return gulp.start('mt');
   });
 
   gulp.watch('src/' + conf.PROJECT_NAME + '/js/lang/**/*.json', function (evt) {
-    let filePath = evt.path;
+    const filePath = evt.path;
     log(chalk.cyan('[changed]'), filePath);
     return gulp.start('i18n:resolve-reference');
   });
