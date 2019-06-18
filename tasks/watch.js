@@ -1,7 +1,6 @@
 /* global process, Buffer */
 
 const path = require('path'),
-  exec = require('child_process').exec,
   gulp = require('gulp'),
   log = require('fancy-log'),
   chalk = require('chalk'),
@@ -77,12 +76,7 @@ gulp.task('watch', function () {
   gulp.watch('src/sw.js', function (evt) {
     const filePath = evt.path;
     log(chalk.cyan('[changed]'), filePath);
-    return gulp
-      .src(filePath)
-      .pipe(eslint())
-      .pipe(eslint.format())
-      .pipe(lazyTasks.babelTask())
-      .pipe(gulp.dest('dist'));
+    return gulp.start('sw');
   });
 
   gulp.watch(

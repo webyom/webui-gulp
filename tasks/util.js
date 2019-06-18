@@ -20,6 +20,22 @@ function execGitCmd(args) {
     .split('\n');
 }
 
+exports.getRevision = function () {
+  try {
+    const baseRevision = fs
+      .readFileSync(`dist/${conf.BASE_PROJECT_NAME}/revision`)
+      .toString()
+      .trim();
+    const revision = fs
+      .readFileSync(`dist/${conf.PROJECT_NAME}/revision`)
+      .toString()
+      .trim();
+    return baseRevision + '-' + revision;
+  } catch (err) {
+    return '';
+  }
+};
+
 exports.getDigest = function (content) {
   return crypto
     .createHash('md5')

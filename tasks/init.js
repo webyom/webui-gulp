@@ -1,7 +1,6 @@
 const exec = require('child_process').exec,
   gulp = require('gulp'),
   conf = require('./conf'),
-  babel = require('gulp-babel'),
   less = require('gulp-less'),
   sass = require('gulp-sass'),
   cache = require('./cache'),
@@ -9,6 +8,16 @@ const exec = require('child_process').exec,
   PluginError = require('plugin-error'),
   util = require('./util'),
   lazyTasks = require('./lazy-tasks');
+
+// revision
+gulp.task('revision', function (done) {
+  exec(
+    `mkdir -p dist/${conf.PROJECT_NAME} && git rev-parse --short HEAD > dist/${
+      conf.PROJECT_NAME
+    }/revision`
+  );
+  done();
+});
 
 // eslint js
 gulp.task('eslint', function () {
@@ -53,11 +62,10 @@ gulp.task('eslint', function () {
 gulp.task('babel', ['eslint'], function () {
   return gulp
     .src(
-      util.appendSrcExclusion([
-        'src/' + conf.PROJECT_NAME + '/**/*.+(js|jsx)',
-        'src/sw.js'
-      ]),
-      {base: 'src'}
+      util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.+(js|jsx)']),
+      {
+        base: 'src'
+      }
     )
     .pipe(cache('babel', 'src', lazyTasks.babelTask))
     .pipe(gulp.dest('dist'));
@@ -66,9 +74,11 @@ gulp.task('babel', ['eslint'], function () {
 // ts
 gulp.task('ts', function () {
   return gulp
-    .src(util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.ts']))
+    .src(util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.ts']), {
+      base: 'src'
+    })
     .pipe(cache('ts', 'src', lazyTasks.tsTask))
-    .pipe(gulp.dest('dist/' + conf.PROJECT_NAME));
+    .pipe(gulp.dest('dist'));
 });
 
 // move html
