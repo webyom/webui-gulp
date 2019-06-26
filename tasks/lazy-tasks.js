@@ -24,6 +24,8 @@ const path = require('path'),
   htmlOptimizer = require('gulp-html-optimizer'),
   propertyMerge = require('gulp-property-merge');
 
+const tsProject = ts.createProject('tsconfig.json');
+
 const EOL = '\n';
 
 // lazy tasks
@@ -140,18 +142,7 @@ exports.babelTask = lazypipe()
 
 exports.tsTask = lazypipe()
   .pipe(exports.propertyMergeTask)
-  .pipe(
-    ts,
-    {
-      isolatedModules: true,
-      esModuleInterop: true,
-      importHelpers: true,
-      emitDecoratorMetadata: true,
-      experimentalDecorators: true,
-      target: 'ES5',
-      module: 'amd'
-    }
-  )
+  .pipe(tsProject)
   .pipe(
     envify,
     {NODE_ENV: conf.ENV}

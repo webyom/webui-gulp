@@ -1,6 +1,6 @@
 {
   "name": "webui-gulp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "webui-gulp",
   "scripts": {},
@@ -27,7 +27,7 @@
     "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.2",
     "gulp-stylelint": "^8.0.0",
-    "gulp-typescript": "^5.0.0-alpha.3",
+    "gulp-typescript": "^5.0.1",
     "gulp-useref": "^3.0.4",
     "imagemin": "^6.1.0",
     "imagemin-mozjpeg": "^8.0.0",
