@@ -74,7 +74,7 @@ gulp.task('babel', ['eslint'], function () {
 // ts
 gulp.task('ts', function () {
   return gulp
-    .src(util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.ts']), {
+    .src(util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.+(ts|tsx)']), {
       base: 'src'
     })
     .pipe(cache('ts', 'src', lazyTasks.tsTask))

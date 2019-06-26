@@ -97,7 +97,7 @@ gulp.task('watch', function () {
   );
 
   gulp.watch(
-    util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.ts']),
+    util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.+(ts|tsx)']),
     function (evt) {
       const filePath = evt.path;
       const part = (path.dirname(filePath) + '/')
