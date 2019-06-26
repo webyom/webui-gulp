@@ -60,9 +60,7 @@ exports.lazyPostcssTask = lazypipe().pipe(
   postcss,
   [
     postcssImport(),
-    postcssPresetEnv({
-      browsers: ['last 4 versions', 'not ie <= 8']
-    })
+    postcssPresetEnv()
   ]
 );
 
