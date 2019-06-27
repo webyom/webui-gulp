@@ -3,6 +3,8 @@ const exec = require('child_process').exec,
   conf = require('./conf'),
   less = require('gulp-less'),
   sass = require('gulp-sass'),
+  ts = require('gulp-typescript'),
+  envify = require('gulp-envify'),
   cache = require('./cache'),
   through = require('through2'),
   PluginError = require('plugin-error'),
@@ -74,10 +76,15 @@ gulp.task('babel', ['eslint'], function () {
 // ts
 gulp.task('ts', function () {
   return gulp
-    .src(util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.+(ts|tsx)']), {
-      base: 'src'
-    })
-    .pipe(cache('ts', 'src', lazyTasks.tsTask))
+    .src(
+      util.appendSrcExclusion(['src/' + conf.PROJECT_NAME + '/**/*.+(ts|tsx)']),
+      {
+        base: 'src'
+      }
+    )
+    .pipe(lazyTasks.propertyMergeTask())
+    .pipe(cache('ts', 'src', ts.createProject('tsconfig.json')))
+    .pipe(envify({NODE_ENV: conf.ENV}))
     .pipe(gulp.dest('dist'));
 });
 

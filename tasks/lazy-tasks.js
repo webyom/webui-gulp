@@ -8,7 +8,6 @@ const path = require('path'),
   lazypipe = require('lazypipe'),
   eslint = require('gulp-eslint'),
   babel = require('gulp-babel'),
-  ts = require('gulp-typescript'),
   less = require('gulp-less'),
   sass = require('gulp-sass'),
   mt2amd = require('gulp-mt2amd'),
@@ -23,8 +22,6 @@ const path = require('path'),
   rename = require('gulp-rename'),
   htmlOptimizer = require('gulp-html-optimizer'),
   propertyMerge = require('gulp-property-merge');
-
-const tsProject = ts.createProject('tsconfig.json');
 
 const EOL = '\n';
 
@@ -139,14 +136,6 @@ exports.babelTask = lazypipe()
     {NODE_ENV: conf.ENV}
   )
   .pipe(exports.lazyAmdWrapTask);
-
-exports.tsTask = lazypipe()
-  .pipe(exports.propertyMergeTask)
-  .pipe(tsProject)
-  .pipe(
-    envify,
-    {NODE_ENV: conf.ENV}
-  );
 
 exports.lessComponentTask = lazypipe()
   .pipe(less)

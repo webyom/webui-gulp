@@ -8,9 +8,12 @@ const path = require('path'),
   conf = require('./conf'),
   less = require('gulp-less'),
   sass = require('gulp-sass'),
+  ts = require('gulp-typescript'),
+  envify = require('gulp-envify'),
   eslint = require('gulp-eslint'),
   mt2amd = require('gulp-mt2amd'),
   rename = require('gulp-rename'),
+  cache = require('./cache'),
   util = require('./util'),
   lazyTasks = require('./lazy-tasks');
 
@@ -106,7 +109,9 @@ gulp.task('watch', function () {
       log(chalk.cyan('[changed]'), filePath);
       return gulp
         .src(filePath)
-        .pipe(lazyTasks.tsTask())
+        .pipe(lazyTasks.propertyMergeTask())
+        .pipe(cache('ts', 'src', ts.createProject('tsconfig.json')))
+        .pipe(envify({NODE_ENV: conf.ENV}))
         .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/' + part));
     }
   );

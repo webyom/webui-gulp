@@ -19,7 +19,7 @@ function replaceExtName(filePath, extName) {
   if (extName === 0) {
     return filePath;
   }
-  if (ext == '.js' || ext == '.jsx') {
+  if (ext == '.js' || ext == '.jsx' || ext == '.ts' || ext == '.tsx') {
     extName = '.js';
   } else {
     extName = ext + '.js';
