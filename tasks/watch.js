@@ -110,8 +110,12 @@ gulp.task('watch', function () {
       return gulp
         .src(filePath)
         .pipe(lazyTasks.propertyMergeTask())
-        .pipe(cache('ts', 'src', ts.createProject('tsconfig.json')))
+        .pipe(cache('ts', 'src', ts.createProject('tsconfig.json', {
+          module: 'commonjs',
+          moduleResolution: 'node'
+        })))
         .pipe(envify({NODE_ENV: conf.ENV}))
+        .pipe(lazyTasks.lazyAmdWrapTask())
         .pipe(gulp.dest('dist/' + conf.PROJECT_NAME + '/' + part));
     }
   );
